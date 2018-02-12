@@ -1,0 +1,210 @@
+# vim: filetype=i3
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+
+# Variables
+set $mod Mod1
+set $term termite
+#set $sink "alsa_output.pci-0000_00_1b.0.analog-stereo"
+
+# Cosmetic settings
+hide_edge_borders both
+for_window [class="^.*"] border pixel 3
+bindsym $mod+z gaps inner current plus 5
+bindsym $mod+Shift+z gaps inner current minus 5
+font pango:Awesome 8, monospace 8
+#gaps inner 20
+#gaps outer 0
+#smart_gaps on
+
+# Basic settings
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+floating_modifier $mod
+
+# Window key bindings 
+bindsym $mod+q kill
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+p scratchpad show
+workspace_auto_back_and_forth yes
+
+# Change container layout
+bindsym $mod+a layout tabbed
+bindsym $mod+s layout toggle split
+
+# Change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Move window
+bindsym $mod+Ctrl+Left move left 30
+bindsym $mod+Ctrl+Down move down 30
+bindsym $mod+Ctrl+Up move up 30
+bindsym $mod+Ctrl+Right move right 30
+
+# Workspace variables
+set $ws1 "1: "
+set $ws2 "2: "
+set $ws3 "3: "
+set $ws4 "4: "
+set $ws5 "5: "
+set $ws6 "6: "
+set $ws7 "7: "
+set $ws8 "8: "
+set $ws9 "9: "
+set $ws10 "10: "
+set $wsF1 "F1"
+set $wsF2 "F2"
+set $wsF3 "F3"
+set $wsF4 "F4"
+#set $wsF5 "F5"
+#set $wsF6 "F6"
+#set $wsF7 "F7"
+#set $wsF8 "F8"
+#set $wsF9 "F9"
+#set $wsF10 "F10"
+#set $wsF11 "F11"
+#set $wsF12 "F12"
+
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+bindsym $mod+F1 workspace $wsF1
+bindsym $mod+F2 workspace $wsF2
+bindsym $mod+F3 workspace $wsF3
+bindsym $mod+F4 workspace $wsF4
+#bindsym $mod+F5 workspace $wsF5
+#bindsym $mod+F6 workspace $wsF6
+#bindsym $mod+F7 workspace $wsF7
+#bindsym $mod+F8 workspace $wsF8
+#bindsym $mod+F9 workspace $wsF9
+#bindsym $mod+F10 workspace $wsF10
+#bindsym $mod+F11 workspace $wsF11
+#bindsym $mod+F12 workspace $wsF12
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+F1 move container to workspace $wsF1
+bindsym $mod+Shift+F2 move container to workspace $wsF2
+bindsym $mod+Shift+F3 move container to workspace $wsF3
+bindsym $mod+Shift+F4 move container to workspace $wsF4
+bindsym $mod+Shift+F5 move container to workspace $wsF5
+bindsym $mod+Shift+F6 move container to workspace $wsF6
+bindsym $mod+Shift+F7 move container to workspace $wsF7
+bindsym $mod+Shift+F8 move container to workspace $wsF8
+bindsym $mod+Shift+F9 move container to workspace $wsF9
+bindsym $mod+Shift+F10 move container to workspace $wsF10
+bindsym $mod+Shift+F11 move container to workspace $wsF11
+bindsym $mod+Shift+F12 move container to workspace $wsF12
+
+# Move programs to specific workspace 
+for_window [class="Firefox Developer Edition"] move to workspace $ws1
+for_window [title=" - Chromium"] move to workspace $ws1
+for_window [class="Term2"] move to workspace $ws2
+for_window [class="TelegramDesktop"] move to workspace $ws3
+for_window [class="Messenger for Desktop"] move to workspace $ws3
+for_window [class="^discord$"] move to workspace $ws3, move left
+for_window [class="^ncmpcpp$"] move to workspace $ws4
+for_window [title="^bum$"] move to workspace $ws4
+for_window [class="^ranger$"] move to workspace $ws5
+for_window [title="Keepass Database.kdbx - KeePassXC"] move to workspace $ws6
+for_window [class="Sublime_text"] move to workspace $ws8
+for_window [class="neomutt"] move to workspace $ws9
+for_window [class="Thunderbird"] move to workspace $ws9
+for_window [class="Deluge"] move to workspace $ws10
+
+# Split terminals
+bindsym $mod+apostrophe	split horizontal ;; exec $term
+bindsym $mod+slash split vertical ;; exec $term
+
+# Resize window
+mode "resize" {
+    bindsym j resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink height 10 px or 10 ppt
+    bindsym semicolon resize grow width 10 px or 10 ppt
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# i3 bar
+bar {
+    status_command i3status
+    position top
+}
+
+# Floating windows
+for_window [class="copyq"] floating enable
+for_window [class="mpv"] floating enable
+for_window [class="Fsearch"] floating enable
+for_window [title="Library"] floating enable
+for_window [class="Pavucontrol"] floating enable
+
+# Custom key bindings
+bindsym XF86AudioMute exec pamixer -t --allow-boost
+bindsym XF86AudioLowerVolume exec pamixer -d 2 --allow-boost
+bindsym XF86AudioRaiseVolume exec pamixer -i 2 --allow-boost
+bindsym Insert exec mpc prev
+bindsym Home exec mpc toggle
+bindsym Prior exec mpc next
+bindsym $mod+ctrl+l exec i3lock
+bindsym $mod+d exec rofi -show run
+bindsym $mod+e exec rofi -show window
+bindsym Print exec maim | xclip -selection clipboard -t image/png
+bindsym ctrl+Print exec maim -s | xclip -selection clipboard -t image/png
+bindsym --release $mod+ctrl+Delete exec xkill
+bindsym $mod+i exec $term -e htop
+bindsym $mod+ctrl+f exec fsearch
+exec setxkbmap -option caps:escape
+
+# Run programs
+exec nm-applet
+exec compton
+exec mpd
+exec mpdscribble
+exec termite --class=ncmpcpp -e ncmpcpp
+exec termite --class=ranger -e ranger
+#exec firefox-developer
+exec chromium
+exec deluge
+exec copyq 
+exec xbindkeys
+exec telegram-desktop
+exec discord
+exec messengerfordesktop
+exec keepassxc
+exec dropbox
+exec unclutter
+#exec subl3
+exec dunst
+#exec termite --class=Term2
+exec bum
+exec redshift
+exec thunderbird
+exec ~/.fehbg

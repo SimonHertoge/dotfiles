@@ -1,0 +1,14 @@
+" Vim settings
+set clipboard+=unnamedplus
+set hlsearch
+set incsearch
+set ignorecase
+set number
+set smartcase
+set scrolloff=5
+
+" Vim bindings
+nmap <CR> o<Esc>
+cmap w!! w !sudo tee > /dev/null %
+nnoremap K i<CR><Esc>
+map <C-l> :noh<CR>
