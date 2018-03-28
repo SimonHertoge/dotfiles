@@ -3,7 +3,8 @@
 
 # Variables
 set $mod Mod1
-set $term termite
+#set $term termite
+set $term urxvt
 #set $sink "alsa_output.pci-0000_00_1b.0.analog-stereo"
 
 # Cosmetic settings
@@ -12,9 +13,16 @@ for_window [class="^.*"] border pixel 3
 bindsym $mod+z gaps inner current plus 5
 bindsym $mod+Shift+z gaps inner current minus 5
 font pango:Awesome 8, monospace 8
-#gaps inner 20
-#gaps outer 0
+gaps inner 20
+gaps outer 0
 #smart_gaps on
+
+# Colors
+# class                 border  backgr. text    indicator
+client.focused          #4c7899 #FF0000 #ffffff #FF0000
+client.focused_inactive #000000 #5f676a #ffffff #484e50
+client.unfocused        #333333 #222222 #888888 #292d2e
+client.urgent           #2f343a #900000 #ffffff #900000
 
 # Basic settings
 bindsym $mod+Shift+c reload
@@ -25,10 +33,9 @@ floating_modifier $mod
 # Window key bindings 
 bindsym $mod+q kill
 bindsym $mod+f fullscreen toggle
-bindsym $mod+Shift+space floating toggle
-bindsym $mod+space focus mode_toggle
-bindsym $mod+p scratchpad show
-workspace_auto_back_and_forth yes
+bindsym $mod+space floating toggle
+bindsym $mod+Shift+space focus mode_toggle
+#workspace_auto_back_and_forth yes
 
 # Change container layout
 bindsym $mod+a layout tabbed
@@ -53,28 +60,20 @@ bindsym $mod+Ctrl+Up move up 30
 bindsym $mod+Ctrl+Right move right 30
 
 # Workspace variables
-set $ws1 "1: "
-set $ws2 "2: "
-set $ws3 "3: "
-set $ws4 "4: "
-set $ws5 "5: "
-set $ws6 "6: "
-set $ws7 "7: "
-set $ws8 "8: "
-set $ws9 "9: "
-set $ws10 "10: "
-set $wsF1 "F1"
-set $wsF2 "F2"
-set $wsF3 "F3"
-set $wsF4 "F4"
-#set $wsF5 "F5"
-#set $wsF6 "F6"
-#set $wsF7 "F7"
-#set $wsF8 "F8"
-#set $wsF9 "F9"
-#set $wsF10 "F10"
-#set $wsF11 "F11"
-#set $wsF12 "F12"
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+set $wsF1 F1
+set $wsF2 F2
+set $wsF3 F3
+set $wsF4 F4
 
 # Switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -91,14 +90,8 @@ bindsym $mod+F1 workspace $wsF1
 bindsym $mod+F2 workspace $wsF2
 bindsym $mod+F3 workspace $wsF3
 bindsym $mod+F4 workspace $wsF4
-#bindsym $mod+F5 workspace $wsF5
-#bindsym $mod+F6 workspace $wsF6
-#bindsym $mod+F7 workspace $wsF7
-#bindsym $mod+F8 workspace $wsF8
-#bindsym $mod+F9 workspace $wsF9
-#bindsym $mod+F10 workspace $wsF10
-#bindsym $mod+F11 workspace $wsF11
-#bindsym $mod+F12 workspace $wsF12
+bindsym $mod+bracketleft workspace prev
+bindsym $mod+bracketright workspace next
 
 # Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $ws1
@@ -110,31 +103,28 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
 bindsym $mod+Shift+F1 move container to workspace $wsF1
 bindsym $mod+Shift+F2 move container to workspace $wsF2
 bindsym $mod+Shift+F3 move container to workspace $wsF3
 bindsym $mod+Shift+F4 move container to workspace $wsF4
-bindsym $mod+Shift+F5 move container to workspace $wsF5
-bindsym $mod+Shift+F6 move container to workspace $wsF6
-bindsym $mod+Shift+F7 move container to workspace $wsF7
-bindsym $mod+Shift+F8 move container to workspace $wsF8
-bindsym $mod+Shift+F9 move container to workspace $wsF9
-bindsym $mod+Shift+F10 move container to workspace $wsF10
-bindsym $mod+Shift+F11 move container to workspace $wsF11
-bindsym $mod+Shift+F12 move container to workspace $wsF12
+bindsym $mod+Shift+bracketleft move container to workspace prev
+bindsym $mod+Shift+bracketright move container to workspace next
 
 # Move programs to specific workspace 
-for_window [class="Firefox Developer Edition"] move to workspace $ws1
-for_window [title=" - Chromium"] move to workspace $ws1
+for_window [class="Firefox"] move to workspace $ws1
+for_window [title="Auto-Type"] move to workspace $ws1
+for_window [class="Chromium"] move to workspace $ws1
 for_window [class="Term2"] move to workspace $ws2
 for_window [class="TelegramDesktop"] move to workspace $ws3
 for_window [class="Messenger for Desktop"] move to workspace $ws3
 for_window [class="^discord$"] move to workspace $ws3, move left
-for_window [class="^ncmpcpp$"] move to workspace $ws4
+for_window [title="ncmpcpp" class="URxvt"] move to workspace $ws4
 for_window [title="^bum$"] move to workspace $ws4
-for_window [class="^ranger$"] move to workspace $ws5
-for_window [title="Keepass Database.kdbx - KeePassXC"] move to workspace $ws6
-for_window [class="Sublime_text"] move to workspace $ws8
+for_window [title="ranger" class="URxvt"] move to workspace $ws5
+for_window [class="Spacefm"] move to workspace $ws5
+for_window [class="keepassxc"] move to workspace $ws7
+for_window [class="Subl3"] move to workspace $ws8
 for_window [class="neomutt"] move to workspace $ws9
 for_window [class="Thunderbird"] move to workspace $ws9
 for_window [class="Deluge"] move to workspace $ws10
@@ -145,26 +135,31 @@ bindsym $mod+slash split vertical ;; exec $term
 
 # Resize window
 mode "resize" {
-    bindsym j resize shrink width 10 px or 10 ppt
-    bindsym k resize grow height 10 px or 10 ppt
-    bindsym l resize shrink height 10 px or 10 ppt
-    bindsym semicolon resize grow width 10 px or 10 ppt
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
 # i3 bar
-bar {
-    status_command i3status
-    position top
-}
+#bar {
+#    status_command i3status
+#    position top
+#}
 
 # Floating windows
 for_window [class="copyq"] floating enable
 for_window [class="mpv"] floating enable
-for_window [class="Fsearch"] floating enable
 for_window [title="Library"] floating enable
 for_window [class="Pavucontrol"] floating enable
+for_window [instance="Term-Scratch"] floating enable, move scratchpad
+for_window [class="Fsearch"] floating enable, move scratchpad
+
+# Scratchpad windows
+bindsym $mod+t [instance="Term-Scratch"] scratchpad show
+bindsym $mod+p [class="Fsearch"] scratchpad show
 
 # Custom key bindings
 bindsym XF86AudioMute exec pamixer -t --allow-boost
@@ -173,38 +168,44 @@ bindsym XF86AudioRaiseVolume exec pamixer -i 2 --allow-boost
 bindsym Insert exec mpc prev
 bindsym Home exec mpc toggle
 bindsym Prior exec mpc next
-bindsym $mod+ctrl+l exec i3lock
+bindsym $mod+ctrl+l exec i3lock-fancy
 bindsym $mod+d exec rofi -show run
 bindsym $mod+e exec rofi -show window
 bindsym Print exec maim | xclip -selection clipboard -t image/png
 bindsym ctrl+Print exec maim -s | xclip -selection clipboard -t image/png
 bindsym --release $mod+ctrl+Delete exec xkill
 bindsym $mod+i exec $term -e htop
-bindsym $mod+ctrl+f exec fsearch
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 exec setxkbmap -option caps:escape
+exec xbindkeys
+exec xset r rate 250 30
 
 # Run programs
 exec nm-applet
 exec compton
 exec mpd
 exec mpdscribble
-exec termite --class=ncmpcpp -e ncmpcpp
-exec termite --class=ranger -e ranger
-#exec firefox-developer
+#exec $term -e ncmpcpp
+#exec $term -e ranger
+#exec firefox-developer-edition
 exec chromium
-exec deluge
+#exec deluge
 exec copyq 
-exec xbindkeys
 exec telegram-desktop
 exec discord
-exec messengerfordesktop
+#exec messengerfordesktop
 exec keepassxc
 exec dropbox
 exec unclutter
 #exec subl3
 exec dunst
-#exec termite --class=Term2
-exec bum
-exec redshift
-exec thunderbird
-exec ~/.fehbg
+exec $term -name Term-Scratch
+exec fsearch
+#exec bum
+exec redshift-gtk
+#exec thunderbird
+exec_always ~/.fehbg
+exec synergyc 192.168.1.12
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+

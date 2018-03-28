@@ -58,6 +58,7 @@ Plug 'suan/vim-instant-markdown'
 Plug 'jtratner/vim-flavored-markdown'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'vim-scripts/VisIncr'
 call plug#end()
 
 " Ctrl-P
@@ -74,7 +75,7 @@ let g:closetag_close_shortcut = '<leader>>'
 " Latex settings
 let g:livepreview_previewer = 'mupdf'
 
-" Vim bindings
+" Bindings
 map <Leader> <Plug>(easymotion-prefix)
 map <C-g> :Goyo<CR>
 map <C-f> :call JsBeautify()<CR>
@@ -92,13 +93,17 @@ cmap w!! w !sudo tee > /dev/null %
 nnoremap K i<CR><Esc>
 map <C-l> :noh<CR>
 inoremap <silent> <Esc> <C-O>:stopinsert<CR>
-nnoremap <BS> X
+"nnoremap <BS> X
 "inoremap jj <Esc>`^
 map OA <up>
+vnoremap // y/\V<C-R>"<CR>
+
+" Commands
+command! ReloadConfig :so ~/.vimrc
 
 " Functions
 " mkdir parent folder if not exists
-function s:MkNonExDir(file, buf)
+function! s:MkNonExDir(file, buf)
     if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
         let dir=fnamemodify(a:file, ':h')
         if !isdirectory(dir)
