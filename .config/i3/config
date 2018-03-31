@@ -15,7 +15,7 @@ bindsym $mod+Shift+z gaps inner current minus 5
 font pango:Awesome 8, monospace 8
 gaps inner 20
 gaps outer 0
-#smart_gaps on
+smart_gaps on
 
 # Colors
 # class                 border  backgr. text    indicator
@@ -119,10 +119,10 @@ for_window [class="Term2"] move to workspace $ws2
 for_window [class="TelegramDesktop"] move to workspace $ws3
 for_window [class="Messenger for Desktop"] move to workspace $ws3
 for_window [class="^discord$"] move to workspace $ws3, move left
-for_window [title="ncmpcpp" class="URxvt"] move to workspace $ws4
-for_window [title="^bum$"] move to workspace $ws4
-for_window [title="ranger" class="URxvt"] move to workspace $ws5
-for_window [class="Spacefm"] move to workspace $ws5
+for_window [title="ncmpcpp" class="URxvt"] move to workspace $ws5
+for_window [title="^bum$"] move to workspace $ws5
+for_window [title="ranger" class="URxvt"] move to workspace $ws4
+for_window [class="Spacefm"] move to workspace $ws4
 for_window [class="keepassxc"] move to workspace $ws7
 for_window [class="Subl3"] move to workspace $ws8
 for_window [class="neomutt"] move to workspace $ws9
@@ -186,8 +186,8 @@ exec nm-applet
 exec compton
 exec mpd
 exec mpdscribble
-#exec $term -e ncmpcpp
-#exec $term -e ranger
+exec $term -e ncmpcpp
+exec $term -e ranger
 #exec firefox-developer-edition
 exec chromium
 #exec deluge
@@ -195,7 +195,7 @@ exec copyq
 exec telegram-desktop
 exec discord
 #exec messengerfordesktop
-exec keepassxc
+#exec keepassxc
 exec dropbox
 exec unclutter
 #exec subl3
@@ -206,6 +206,6 @@ exec fsearch
 exec redshift-gtk
 #exec thunderbird
 exec_always ~/.fehbg
-exec synergyc 192.168.1.12
+#exec synergyc 192.168.1.12
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
