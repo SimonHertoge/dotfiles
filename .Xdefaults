@@ -1,7 +1,15 @@
+Xft.lcdfilter: lcddefault
+Xft.antialias: true
+Xft.autohint: 0
+Xft.hinting: true
+Xft.hintstyle: hintslight
+Xft.rgba: rgb
+Xft.dpi: 96
+
 *foreground: #00cc00
 *foreground_bold: #a8a19f
 *cursor: #a8a19f
-*background:       #1b1918
+*background: #1b1918
 !!*background: rgba(0, 0, 0, .7)
 
 !! black
@@ -47,9 +55,6 @@ URxvt.url-select.launcher: firefox-developer-edition
 URxvt.url-select.underline: true
 !! keyboard-select:
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
-!! resize-font
-URxvt.resize-font.smaller:	C-Down
-URxvt.resize-font.bigger:	C-Up
 !! Matcher
 URxvt.url-launcher:	firefox-developer-edition
 URxvt.matcher.button:	1

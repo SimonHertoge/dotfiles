@@ -12,5 +12,5 @@ while true; do
     lines=$((($lines - 1) * 3))
 
     echo "" > $hackspeed_cache
-    echo "#  $lines"
+    echo "# $lines"
 done
