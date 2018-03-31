@@ -25,6 +25,8 @@ set ignorecase
 set smartcase
 "set cursorline
 set ttimeoutlen=0
+set splitbelow
+set splitright
 
 " Cursor shapes
 let &t_SI = "\<Esc>[6 q"
@@ -97,6 +99,10 @@ inoremap <silent> <Esc> <C-O>:stopinsert<CR>
 "inoremap jj <Esc>`^
 map OA <up>
 vnoremap // y/\V<C-R>"<CR>
+nmap <C-J> <C-W><C-J>
+nmap <C-K> <C-W><C-K>
+nmap <C-L> <C-W><C-L>
+nmap <C-H> <C-W><C-H>
 
 " Commands
 command! ReloadConfig :so ~/.vimrc
