@@ -9,14 +9,14 @@
 PS1='[\u@\h \W]\$ '
 PATH=$PATH:/home/simon/.gem/ruby/2.4.0/bin
 
+# Basic aliases, more in fish
 alias ls='ls --color=auto -al'
 alias grep='grep -i --color=auto'
 alias pg='ps aux | grep --color=auto'
-alias weather='curl wttr.in'
-alias yt='youtube-dl -n --all-subs --convert-subs srt --add-metadata --hls-use-mpegts --skip-unavailable-fragments'
 alias ka='killall'
 
 export EDITOR="vim"
 export FZF_CTRL_T_COMMAND='ag --hidden --ignore='/mnt/' -g ""' 
+export PAGER='less -M +Gg'
 
 exec fish

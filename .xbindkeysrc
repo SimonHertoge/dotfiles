@@ -70,6 +70,13 @@
     b:8
 "xdotool key Ctrl+Tab"
     b:9
+
+# Up/Down in fsearch
+# "/home/simon/scripts/fsearch-keys.sh Down"
+#     control + j
+# "/home/simon/scripts/fsearch-keys.sh Up"
+#     control + k
+
 ##################################
 # End of xbindkeys configuration #
 ##################################

@@ -1,4 +1,4 @@
-# Defined in - @ line 0
-function weather --description 'alias weather=curl wttr.in'
-	curl wttr.in $argv;
+# Defined in - @ line 1
+function weather --description 'alias weather=curl wttr.in/Hansbeke'
+	curl wttr.in/Hansbeke $argv;
 end

@@ -115,7 +115,7 @@ bindsym $mod+Shift+bracketright move container to workspace next
 for_window [class="Firefox"] move to workspace $ws1
 for_window [title="Auto-Type"] move to workspace $ws1
 for_window [class="Chromium"] move to workspace $ws1
-for_window [class="Term2"] move to workspace $ws2
+for_window [title="main-term" class="URxvt"] move to workspace $ws2
 for_window [class="TelegramDesktop"] move to workspace $ws3
 for_window [class="Messenger for Desktop"] move to workspace $ws3
 for_window [class="^discord$"] move to workspace $ws3, move left
@@ -124,6 +124,7 @@ for_window [title="^bum$"] move to workspace $ws5
 for_window [title="ranger" class="URxvt"] move to workspace $ws4
 for_window [class="Spacefm"] move to workspace $ws4
 for_window [class="keepassxc"] move to workspace $ws7
+for_window [title="notepad" class="URxvt"] move to workspace $ws8
 for_window [class="Subl3"] move to workspace $ws8
 for_window [class="neomutt"] move to workspace $ws9
 for_window [class="Thunderbird"] move to workspace $ws9
@@ -154,11 +155,11 @@ for_window [class="copyq"] floating enable
 for_window [class="mpv"] floating enable
 for_window [title="Library"] floating enable
 for_window [class="Pavucontrol"] floating enable
-for_window [instance="Term-Scratch"] floating enable, move scratchpad
+for_window [instance="term-scratch"] floating enable, move scratchpad
 for_window [class="Fsearch"] floating enable, move scratchpad
 
 # Scratchpad windows
-bindsym $mod+t [instance="Term-Scratch"] scratchpad show
+bindsym $mod+t [instance="term-scratch"] scratchpad show
 bindsym $mod+p [class="Fsearch"] scratchpad show
 
 # Custom key bindings
@@ -184,10 +185,12 @@ exec xset r rate 250 30
 # Run programs
 exec nm-applet
 exec compton
+exec numlockx
 exec mpd
 exec mpdscribble
-exec $term -e ncmpcpp
+exec $term -name main-term
 exec $term -e ranger
+exec $term -e ncmpcpp
 #exec firefox-developer-edition
 exec chromium
 #exec deluge
@@ -198,14 +201,15 @@ exec discord
 #exec keepassxc
 exec dropbox
 exec unclutter
+exec $term -e vim -c "set titlestring=notepad"
 #exec subl3
 exec dunst
-exec $term -name Term-Scratch
+exec $term -name term-scratch
 exec fsearch
-#exec bum
+exec bum
 exec redshift-gtk
 #exec thunderbird
 exec_always ~/.fehbg
 #exec synergyc 192.168.1.12
+exec udiskie --tray
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-
