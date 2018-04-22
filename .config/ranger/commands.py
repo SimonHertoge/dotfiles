@@ -119,3 +119,10 @@ class mount(Command):
         obj = MountLoader(mountpath)
         obj.signal_bind('after', mount_finished)
         self.fm.loader.add(obj)
+
+# class pptx2pdf(Command):
+#     def execute(self):
+#         selected_files = self.fm.thisdir.get_selection()
+
+#         for file in selected_files:
+           
