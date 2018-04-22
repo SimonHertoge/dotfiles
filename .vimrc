@@ -23,10 +23,11 @@ set scrolloff=3
 set noshowmode
 set ignorecase
 set smartcase
-"set cursorline
+set cursorline
 set ttimeoutlen=0
 set splitbelow
 set splitright
+set hidden
 
 " Cursor shapes
 let &t_SI = "\<Esc>[6 q"
@@ -61,11 +62,16 @@ Plug 'jtratner/vim-flavored-markdown'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'vim-scripts/VisIncr'
+Plug 'tpope/vim-obsession'
 call plug#end()
 
-" Ctrl-P
-let g:ctrlp_map = '<c-p>'
+" Ctrl-P settings
+let g:ctrlp_map = '<c-n>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-t>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
 
 " Closetag settings, maybe unnecessary
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
@@ -76,6 +82,12 @@ let g:closetag_close_shortcut = '<leader>>'
 
 " Latex settings
 let g:livepreview_previewer = 'mupdf'
+
+let g:lightline = {
+      \ 'component_function': {
+      \   'filename': 'FilenameForLightline'
+      \ }
+      \ }
 
 " Bindings
 map <Leader> <Plug>(easymotion-prefix)
@@ -92,17 +104,24 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 cmap w!! w !sudo tee > /dev/null %
-nnoremap K i<CR><Esc>
-map <C-l> :noh<CR>
+"nnoremap K i<CR><Esc>
+map <Esc>[; <C-Semicolon>
+map <C-Semicolon> :noh<CR>
 inoremap <silent> <Esc> <C-O>:stopinsert<CR>
 "nnoremap <BS> X
 "inoremap jj <Esc>`^
 map OA <up>
 vnoremap // y/\V<C-R>"<CR>
-nmap <C-J> <C-W><C-J>
-nmap <C-K> <C-W><C-K>
-"nmap <C-L> <C-W><C-L>
-nmap <C-H> <C-W><C-H>
+nmap <C-j> <C-W><C-J>
+nmap <C-k> <C-W><C-K>
+nmap <C-l> <C-W><C-L>
+nmap <C-h> <C-W><C-H>
+nmap J gt
+nmap K gT
+map <C-p> :CtrlPBuffer<CR>
+map <C-n> :CtrlP<CR>
+map ZZ :wqa<CR>
+map gn :tabe<CR>
 
 " Commands
 command! ReloadConfig :so ~/.vimrc
@@ -121,3 +140,8 @@ augroup BWCCreateDir
     autocmd!
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
+
+" Show full path of filename
+function! FilenameForLightline()
+    return expand('%')
+endfunction

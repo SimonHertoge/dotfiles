@@ -13,7 +13,7 @@ for_window [class="^.*"] border pixel 3
 bindsym $mod+z gaps inner current plus 5
 bindsym $mod+Shift+z gaps inner current minus 5
 font pango:Awesome 8, monospace 8
-gaps inner 20
+gaps inner 5
 gaps outer 0
 smart_gaps on
 
@@ -170,7 +170,7 @@ bindsym Insert exec mpc prev
 bindsym Home exec mpc toggle
 bindsym Prior exec mpc next
 bindsym $mod+ctrl+l exec i3lock-fancy
-bindsym $mod+d exec rofi -show run
+bindsym $mod+d exec rofi -modi drun -show drun
 bindsym $mod+e exec rofi -show window
 bindsym Print exec maim | xclip -selection clipboard -t image/png
 bindsym ctrl+Print exec maim -s | xclip -selection clipboard -t image/png
@@ -178,21 +178,21 @@ bindsym --release $mod+ctrl+Delete exec xkill
 bindsym $mod+i exec $term -e htop
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
-exec setxkbmap -option caps:escape
+exec setxkbmap -option compose:lwin -option caps:escape
 exec xbindkeys
 exec xset r rate 250 30
 
 # Run programs
 exec nm-applet
-exec compton
+#exec compton
 exec numlockx
 exec mpd
 exec mpdscribble
 exec $term -name main-term
 exec $term -e ranger
 exec $term -e ncmpcpp
-#exec firefox-developer-edition
-exec chromium
+exec firefox-developer-edition
+#exec chromium
 #exec deluge
 exec copyq 
 exec telegram-desktop
