@@ -1,5 +1,4 @@
 " Vim settings
-"colorscheme wal
 set autoindent
 set backspace=indent,eol,start
 set complete-=i
@@ -34,6 +33,10 @@ let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
 
+" Theming
+hi CursorLine cterm=none ctermbg=235 ctermfg=none
+"colorscheme wal
+
 " Load plugins
 call plug#begin('~/.vim/plugged')
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
@@ -63,63 +66,70 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'vim-scripts/VisIncr'
 Plug 'tpope/vim-obsession'
+Plug 'scrooloose/nerdtree'
+Plug 'severin-lemaignan/vim-minimap'
 call plug#end()
 
-" Ctrl-P settings
+" Plugin settings
 let g:ctrlp_map = '<c-n>'
 let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-t>'],
-    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
-    \ }
-
-" Closetag settings, maybe unnecessary
+let g:ctrlp_prompt_mappings = { 
+            \ 'AcceptSelection("e")': ['<c-t>'], 
+            \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>']
+            \ }
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_emptyTags_caseSensitive = 1
 let g:closetag_shortcut = '>'
 let g:closetag_close_shortcut = '<leader>>'
-
-" Latex settings
 let g:livepreview_previewer = 'mupdf'
-
 let g:lightline = {
-      \ 'component_function': {
-      \   'filename': 'FilenameForLightline'
-      \ }
-      \ }
+            \ 'component_function': {
+            \ 'filename': 'FilenameForLightline'
+            \   }
+            \ }
+let g:minimap_toggle='<leader>mm'
+let NERDTreeMapActivateNode='l'
 
-" Bindings
+" Terminal hacks
+map <Esc>[; <C-Semicolon>
+map <ESC>Oa <C-Up>
+map <ESC>Ob <C-Down>
+map <ESC>Oc <C-Right>
+map <ESC>Od <C-Left>
+map! <ESC>Oa <C-Up>
+map! <ESC>Ob <C-Down>
+map! <ESC>Oc <C-Right>
+map! <ESC>Od <C-Left>
+
+" Vim hacks
+noremap! <C-BS> <C-w>
+noremap! <C-h> <C-w>
+cmap w!! w !sudo tee > /dev/null %
+inoremap <silent> <Esc> <C-O>:stopinsert<CR>
+
+" Plugin keybindings
 map <Leader> <Plug>(easymotion-prefix)
 map <C-g> :Goyo<CR>
 map <C-f> :call JsBeautify()<CR>
-nmap <CR> o<Esc>
-noremap! <C-BS> <C-w>
-noremap! <C-h> <C-w>
-inoremap <C-w> <C-\><C-o>dB
-inoremap <C-BS> <C-\><C-o>db
-nmap <C-_> gcc<Esc>
-vmap <C-_> gcc<Esc>
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
-cmap w!! w !sudo tee > /dev/null %
-"nnoremap K i<CR><Esc>
-map <Esc>[; <C-Semicolon>
+map <C-p> :CtrlPBuffer<CR>
+map <C-n> :CtrlP<CR>
+nmap <C-_> gcc<Esc>
+vmap <C-_> gcc<Esc>
+map <C-m> :MinimapToggle<CR>
+
+" Normal keybindings
+nmap <CR> o<Esc>
 map <C-Semicolon> :noh<CR>
-inoremap <silent> <Esc> <C-O>:stopinsert<CR>
-"nnoremap <BS> X
-"inoremap jj <Esc>`^
-map OA <up>
-vnoremap // y/\V<C-R>"<CR>
 nmap <C-j> <C-W><C-J>
 nmap <C-k> <C-W><C-K>
 nmap <C-l> <C-W><C-L>
 nmap <C-h> <C-W><C-H>
 nmap J gt
 nmap K gT
-map <C-p> :CtrlPBuffer<CR>
-map <C-n> :CtrlP<CR>
 map ZZ :wqa<CR>
 map gn :tabe<CR>
 

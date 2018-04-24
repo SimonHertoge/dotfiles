@@ -37,21 +37,23 @@ URxvt.depth: 32
 URxvt.font: xft:monospace:size=11
 URxvt.scrollBar: false
 URxvt.cursorColor:white
+URxvt.colorUL: #4682B4
+
+!! Settings
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 URxvt.keysym.C-semicolon: \033[;
 
 !! Extensions
 URxvt.perl-ext-common: default,matcher,resize-font,url-select,keyboard-select,selection-to-clipboard,clipboard
-URxvt.colorUL: #4682B4
 URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.launcher: firefox-developer-edition
 URxvt.url-select.underline: true
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
 URxvt.url-launcher:	firefox-developer-edition
 URxvt.matcher.button: 1
-URxvt.keysym.C-C: perl:clipboard:copy
-URxvt.keysym.C-V: perl:clipboard:paste
+URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 
 !! Rofi theme
 rofi.color-enabled:	true

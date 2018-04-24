@@ -1,4 +1,4 @@
-# Defined in - @ line 0
-function ls --description 'alias ls=ls --color=auto -al'
-	command ls --color=auto -al $argv;
+# Defined in - @ line 1
+function ls --description 'alias ls=ls --color=auto -alh'
+	command ls --color=auto -alh $argv;
 end
