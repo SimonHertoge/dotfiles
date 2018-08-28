@@ -208,4 +208,5 @@ exec $term -name calcurse -e calcurse
 exec_always ~/.fehbg
 #exec synergyc 192.168.1.12
 exec udiskie --tray
+exec ~/.config/polybar/launch.sh
 exec echo S: $(date) >> ~/Documents/uptime

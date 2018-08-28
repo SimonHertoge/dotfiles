@@ -13,5 +13,5 @@ abbr -a rg 'rg -p'
 abbr -a sys 'sudo systemctl'
 abbr -a vimc 'vim --servername main --remote-tab'
 abbr -a vims 'vim --servername main -S ~/Session.vim'
-abbr -a weather 'curl wttr.in/'$LOCATION
+abbr -a weather 'curl wttr.in/$LOCATION'
 abbr -a yt 'youtube-dl -n --all-subs --convert-subs srt --embed-subs --add-metadata --hls-use-mpegts --skip-unavailable-fragments'
