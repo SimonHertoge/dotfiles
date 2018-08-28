@@ -17,30 +17,31 @@ from ranger.ext.shell_escape import *
 class extract(Command):
     def execute(self):
         """ Extract copied files to current directory """
-        copied_files = tuple(self.fm.copy_buffer)
+        cwd = self.fm.thisdir
 
-        if not copied_files:
+        marked_files = cwd.get_selection()
+
+        if not marked_files:
             return
 
         def refresh(_):
             cwd = self.fm.get_directory(original_path)
             cwd.load_content()
 
-        one_file = copied_files[0]
+        one_file = marked_files[0]
         cwd = self.fm.thisdir
-        original_path = cwd.path
-        au_flags = ['-X', cwd.path]
-        au_flags += self.line.split()[1:]
+        path = os.path.join(cwd.path, ' '.join(self.line.split()[1:]))
+        au_flags = ['-X', path]
         au_flags += ['-e']
 
         self.fm.copy_buffer.clear()
         self.fm.cut_buffer = False
-        if len(copied_files) == 1:
+        if len(marked_files) == 1:
             descr = "extracting: " + os.path.basename(one_file.path)
         else:
             descr = "extracting files from: " + os.path.basename(one_file.dirname)
         obj = CommandLoader(args=['aunpack'] + au_flags \
-                + [f.path for f in copied_files], descr=descr)
+                + [f.path for f in marked_files], descr=descr)
 
         obj.signal_bind('after', refresh)
         self.fm.loader.add(obj)
@@ -75,28 +76,6 @@ class compress(Command):
         extension = ['.zip', '.tar.gz', '.rar', '.7z']
         return ['compress ' + os.path.basename(self.fm.thisdir.path) + ext for ext in extension]
 
-class MountLoader(Loadable, SignalDispatcher):
-    """
-    Wait until a directory is mounted
-    """
-    def __init__(self, path):
-        SignalDispatcher.__init__(self)
-        descr = "Waiting for dir '" + path + "' to be mounted"
-        Loadable.__init__(self, self.generate(), descr)
-        self.path = path
-
-    def generate(self):
-        available = False
-        while not available:
-            try:
-                if os.path.ismount(self.path):
-                    available = True
-            except:
-                pass
-            yield
-            time.sleep(0.03)
-        self.signal_emit('after')
-
 class mount(Command):
     def execute(self):
         selected_files = self.fm.thisdir.get_selection()
@@ -105,20 +84,10 @@ class mount(Command):
             return
 
         space = ' '
-        self.fm.execute_command("cdemu --bus system unload 0")
-        self.fm.execute_command("cdemu --bus system load 0 " + \
+        self.fm.execute_command("cdemu unload 0")
+        self.fm.execute_command("cdemu load 0 " + \
                 space.join([shell_escape(f.path) for f in selected_files]))
- 
-        mountpath = "/media/simon/"
-
-        def mount_finished(path):
-            currenttab = self.fm.current_tab
-            self.fm.tab_open(9, mountpath)
-            self.fm.tab_open(currenttab)
-
-        obj = MountLoader(mountpath)
-        obj.signal_bind('after', mount_finished)
-        self.fm.loader.add(obj)
+        self.fm.tab_open("/run/media/simon/")
 
 class fzf_select(Command):
     """
@@ -130,14 +99,7 @@ class fzf_select(Command):
     def execute(self):
         import subprocess
         import os.path
-        if self.quantifier:
-            # match only directories
-            command="find -L . \( -path '*/\.*' -o -fstype 'dev' -o -fstype 'proc' \) -prune \
-            -o -type d -print 2> /dev/null | sed 1d | cut -b3- | fzf +m"
-        else:
-            # match files and directories
-            command="find -L . \( -path '*/\.*' -o -fstype 'dev' -o -fstype 'proc' \) -prune \
-            -o -print 2> /dev/null | sed 1d | cut -b3- | fzf +m"
+        command = "fd -H -E \'/mnt/\' | fzf +m"
         fzf = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         stdout, stderr = fzf.communicate()
         if fzf.returncode == 0:
@@ -147,9 +109,79 @@ class fzf_select(Command):
             else:
                 self.fm.select_file(fzf_file)
 
+from collections import deque
+fd_deq = deque()
+class fd_search(Command):
+    """:fd_search [-d<depth>] <query>
+
+    Executes "fd -d<depth> <query>" in the current directory and focuses the
+    first match. <depth> defaults to 1, i.e. only the contents of the current
+    directory.
+    """
+
+    def execute(self):
+        import subprocess
+        from ranger.ext.get_executables import get_executables
+        if not 'fd' in get_executables():
+            self.fm.notify("Couldn't find fd on the PATH.", bad=True)
+            return
+        if self.arg(1):
+            if self.arg(1)[:2] == '-d':
+                depth = self.arg(1)
+                target = self.rest(2)
+            else:
+                depth = '-d1'
+                target = self.rest(1)
+        else:
+            self.fm.notify(":fd_search needs a query.", bad=True)
+            return
+
+        # For convenience, change which dict is used as result_sep to change
+        # fd's behavior from splitting results by \0, which allows for newlines
+        # in your filenames to splitting results by \n, which allows for \0 in
+        # filenames.
+        null_sep = {'arg': '-0', 'split': '\0'}
+        nl_sep = {'arg': '', 'split': '\n'}
+        result_sep = null_sep
+
+        process = subprocess.Popen(['fd', result_sep['arg'], depth, target],
+                    universal_newlines=True, stdout=subprocess.PIPE)
+        (search_results, _err) = process.communicate()
+        global fd_deq
+        fd_deq = deque((self.fm.thisdir.path + os.sep + rel for rel in
+            sorted(search_results.split(result_sep['split']), key=str.lower)
+            if rel != ''))
+        if len(fd_deq) > 0:
+            self.fm.select_file(fd_deq[0])
+
+class fd_next(Command):
+    """:fd_next
+
+    Selects the next match from the last :fd_search.
+    """
+
+    def execute(self):
+        if len(fd_deq) > 1:
+            fd_deq.rotate(-1) # rotate left
+            self.fm.select_file(fd_deq[0])
+        elif len(fd_deq) == 1:
+            self.fm.select_file(fd_deq[0])
+
+class fd_prev(Command):
+    """:fd_prev
+
+    Selects the next match from the last :fd_search.
+    """
+
+    def execute(self):
+        if len(fd_deq) > 1:
+            fd_deq.rotate(1) # rotate right
+            self.fm.select_file(fd_deq[0])
+        elif len(fd_deq) == 1:
+            self.fm.select_file(fd_deq[0])
+
 # class pptx2pdf(Command):
 #     def execute(self):
 #         selected_files = self.fm.thisdir.get_selection()
 
 #         for file in selected_files:
-           

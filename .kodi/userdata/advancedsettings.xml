@@ -1,0 +1,12 @@
+<advancedsettings>
+	<video>
+		<subsdelayrange>50</subsdelayrange>
+	</video>
+	<videolibrary>
+		<hideallitems>true</hideallitems>  <!-- removes the "*All" items from the video library -->
+	</videolibrary>
+    <seeksteps>2, 5, 10, 30, 60, 180, 300, 600, 1800</seeksteps>
+    <videoextensions>
+      <remove>.rar|.zip</remove>
+    </videoextensions>
+</advancedsettings>

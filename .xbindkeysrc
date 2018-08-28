@@ -39,7 +39,7 @@
 
 # Examples of commands:
 
-# "xbindkeys_show" 
+# "xbindkeys_show"
   # control+shift + q
 
 # set directly keycode (here control + f with my keyboard)
@@ -70,11 +70,15 @@
     b:8
 "xdotool key Ctrl+Tab"
     b:9
-
+# Remap back and forward
+"xdotool key XF86Back"
+    Control + b:8
+"xdotool key XF86Forward"
+    Control + b:9
 # Up/Down in fsearch
-# "/home/simon/scripts/fsearch-keys.sh Down"
+# "~/scripts/fsearch-keys.sh Down"
 #     control + j
-# "/home/simon/scripts/fsearch-keys.sh Up"
+# "~/scripts/fsearch-keys.sh Up"
 #     control + k
 
 ##################################

@@ -3,9 +3,7 @@
 
 # Variables
 set $mod Mod1
-#set $term termite
 set $term urxvt
-#set $sink "alsa_output.pci-0000_00_1b.0.analog-stereo"
 
 # Cosmetic settings
 hide_edge_borders both
@@ -13,13 +11,13 @@ for_window [class="^.*"] border pixel 3
 bindsym $mod+z gaps inner current plus 5
 bindsym $mod+Shift+z gaps inner current minus 5
 font pango:Awesome 8, monospace 8
-gaps inner 5
+gaps inner 10
 gaps outer 0
 smart_gaps on
 
 # Colors
 # class                 border  backgr. text    indicator
-client.focused          #4c7899 #FF0000 #ffffff #FF0000
+# client.focused          #4c7899 #FF0000 #ffffff #FF0000
 client.focused_inactive #000000 #5f676a #ffffff #484e50
 client.unfocused        #333333 #222222 #888888 #292d2e
 client.urgent           #2f343a #900000 #ffffff #900000
@@ -27,15 +25,15 @@ client.urgent           #2f343a #900000 #ffffff #900000
 # Basic settings
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 floating_modifier $mod
+# focus_on_window_activation focus
+workspace_auto_back_and_forth yes
 
-# Window key bindings 
+# Window key bindings
 bindsym $mod+q kill
 bindsym $mod+f fullscreen toggle
-bindsym $mod+space floating toggle
-bindsym $mod+Shift+space focus mode_toggle
-#workspace_auto_back_and_forth yes
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
 
 # Change container layout
 bindsym $mod+a layout tabbed
@@ -59,80 +57,65 @@ bindsym $mod+Ctrl+Down move down 30
 bindsym $mod+Ctrl+Up move up 30
 bindsym $mod+Ctrl+Right move right 30
 
-# Workspace variables
-set $ws1 1
-set $ws2 2
-set $ws3 3
-set $ws4 4
-set $ws5 5
-set $ws6 6
-set $ws7 7
-set $ws8 8
-set $ws9 9
-set $ws10 10
-set $wsF1 F1
-set $wsF2 F2
-set $wsF3 F3
-set $wsF4 F4
-
 # Switch to workspace
-bindsym $mod+1 workspace $ws1
-bindsym $mod+2 workspace $ws2
-bindsym $mod+3 workspace $ws3
-bindsym $mod+4 workspace $ws4
-bindsym $mod+5 workspace $ws5
-bindsym $mod+6 workspace $ws6
-bindsym $mod+7 workspace $ws7
-bindsym $mod+8 workspace $ws8
-bindsym $mod+9 workspace $ws9
-bindsym $mod+0 workspace $ws10
-bindsym $mod+F1 workspace $wsF1
-bindsym $mod+F2 workspace $wsF2
-bindsym $mod+F3 workspace $wsF3
-bindsym $mod+F4 workspace $wsF4
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4, [instance="ncmpcpp" class="URxvt"] focus
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+bindsym $mod+F1 workspace 11
+bindsym $mod+F2 workspace 12
+bindsym $mod+F3 workspace 13
+bindsym $mod+F4 workspace 14
 bindsym $mod+bracketleft workspace prev
 bindsym $mod+bracketright workspace next
 
-# Move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace $ws1
-bindsym $mod+Shift+2 move container to workspace $ws2
-bindsym $mod+Shift+3 move container to workspace $ws3
-bindsym $mod+Shift+4 move container to workspace $ws4
-bindsym $mod+Shift+5 move container to workspace $ws5
-bindsym $mod+Shift+6 move container to workspace $ws6
-bindsym $mod+Shift+7 move container to workspace $ws7
-bindsym $mod+Shift+8 move container to workspace $ws8
-bindsym $mod+Shift+9 move container to workspace $ws9
-bindsym $mod+Shift+0 move container to workspace $ws10
-bindsym $mod+Shift+F1 move container to workspace $wsF1
-bindsym $mod+Shift+F2 move container to workspace $wsF2
-bindsym $mod+Shift+F3 move container to workspace $wsF3
-bindsym $mod+Shift+F4 move container to workspace $wsF4
-bindsym $mod+Shift+bracketleft move container to workspace prev
-bindsym $mod+Shift+bracketright move container to workspace next
+# move focused container to workspace
+bindsym $mod+Shift+1 move --no-auto-back-and-forth container to workspace 1
+bindsym $mod+Shift+2 move --no-auto-back-and-forth container to workspace 2
+bindsym $mod+Shift+3 move --no-auto-back-and-forth container to workspace 3
+bindsym $mod+Shift+4 move --no-auto-back-and-forth container to workspace 4
+bindsym $mod+Shift+5 move --no-auto-back-and-forth container to workspace 5
+bindsym $mod+Shift+6 move --no-auto-back-and-forth container to workspace 6
+bindsym $mod+Shift+7 move --no-auto-back-and-forth container to workspace 7
+bindsym $mod+Shift+8 move --no-auto-back-and-forth container to workspace 8
+bindsym $mod+Shift+9 move --no-auto-back-and-forth container to workspace 9
+bindsym $mod+Shift+0 move --no-auto-back-and-forth container to workspace 10
+bindsym $mod+Shift+F1 move --no-auto-back-and-forth container to workspace 11
+bindsym $mod+Shift+F2 move --no-auto-back-and-forth container to workspace 12
+bindsym $mod+Shift+F3 move --no-auto-back-and-forth container to workspace 13
+bindsym $mod+Shift+F4 move --no-auto-back-and-forth container to workspace 14
+bindsym $mod+Shift+bracketleft move --no-auto-back-and-forth container to workspace prev
+bindsym $mod+Shift+bracketright move --no-auto-back-and-forth container to workspace next
 
-# Move programs to specific workspace 
-for_window [class="Firefox"] move to workspace $ws1
-for_window [title="Auto-Type"] move to workspace $ws1
-for_window [class="Chromium"] move to workspace $ws1
-for_window [title="main-term" class="URxvt"] move to workspace $ws2
-for_window [class="TelegramDesktop"] move to workspace $ws3
-for_window [class="Messenger for Desktop"] move to workspace $ws3
-for_window [class="^discord$"] move to workspace $ws3, move left
-for_window [title="ncmpcpp" class="URxvt"] move to workspace $ws5
-for_window [title="^bum$"] move to workspace $ws5
-for_window [title="ranger" class="URxvt"] move to workspace $ws4
-for_window [class="Spacefm"] move to workspace $ws4
-for_window [class="keepassxc"] move to workspace $ws7
-for_window [title="notepad" class="URxvt"] move to workspace $ws8
-for_window [class="Subl3"] move to workspace $ws8
-for_window [class="neomutt"] move to workspace $ws9
-for_window [class="Thunderbird"] move to workspace $ws9
-for_window [class="Deluge"] move to workspace $ws10
+# move programs to specific workspace
+for_window [class="Firefox"] move --no-auto-back-and-forth to workspace 1
+for_window [title="^Auto-Type"] move --no-auto-back-and-forth to workspace 1
+for_window [class="Chromium"] move --no-auto-back-and-forth to workspace 1
+for_window [instance="ranger" class="URxvt"] move --no-auto-back-and-forth to workspace 2
+for_window [class="TelegramDesktop"] move --no-auto-back-and-forth to workspace 3
+for_window [class="^discord$"] move --no-auto-back-and-forth to workspace 3, move left
+for_window [class="Messenger for Desktop"] move --no-auto-back-and-forth to workspace 3
+for_window [instance="ncmpcpp" class="URxvt"] move --no-auto-back-and-forth to workspace 4
+for_window [title="^bum$"] move --no-auto-back-and-forth to workspace 4, resize set 300 300, move position 1500 700
+for_window [instance="main-term" class="URxvt"] move --no-auto-back-and-forth to workspace 5
+for_window [class="keepassxc"] move --no-auto-back-and-forth to workspace 7
+for_window [instance="notepad" class="URxvt"] move --no-auto-back-and-forth to workspace 8
+for_window [class="Subl3"] move --no-auto-back-and-forth to workspace 8
+for_window [instance="^neomutt$"] move --no-auto-back-and-forth to workspace 9
+for_window [class="Thunderbird"] move --no-auto-back-and-forth to workspace 9
+for_window [class="Deluge"] move --no-auto-back-and-forth to workspace 10
+for_window [class="Kodi"] move --no-auto-back-and-forth to workspace 10
+for_window [floating title="^(?!bum).*$" instance="^(?!term-scratch).*$"] move --no-auto-back-and-forth to workspace current
 
 # Split terminals
-bindsym $mod+apostrophe	split horizontal ;; exec $term
-bindsym $mod+slash split vertical ;; exec $term
+bindsym $mod+apostrophe	split horizontal; exec $term
+bindsym $mod+slash split vertical; exec $term
 
 # Resize window
 mode "resize" {
@@ -157,10 +140,13 @@ for_window [title="Library"] floating enable
 for_window [class="Pavucontrol"] floating enable
 for_window [instance="term-scratch"] floating enable, move scratchpad
 for_window [class="Fsearch"] floating enable, move scratchpad
+for_window [class="File-roller"] floating enable
+for_window [instance="calcurse"] floating enable, move scratchpad
 
 # Scratchpad windows
 bindsym $mod+t [instance="term-scratch"] scratchpad show
-bindsym $mod+p [class="Fsearch"] scratchpad show
+bindsym $mod+p [instance="calcurse" class="URxvt"] scratchpad show
+bindsym $mod+Ctrl+f [class="Fsearch"] scratchpad show
 
 # Custom key bindings
 bindsym XF86AudioMute exec pamixer -t --allow-boost
@@ -169,47 +155,57 @@ bindsym XF86AudioRaiseVolume exec pamixer -i 2 --allow-boost
 bindsym Insert exec mpc prev
 bindsym Home exec mpc toggle
 bindsym Prior exec mpc next
-bindsym $mod+ctrl+l exec i3lock-fancy
+bindsym $mod+Ctrl+l exec mpc pause; exec echo "L: $(date)" >> ~/Documents/uptime; exec "~/scripts/i3lock.sh -n; echo U: $(date) >> ~/Documents/uptime"
 bindsym $mod+d exec rofi -modi drun -show drun
+bindsym $mod+Shift+d exec rofi -modi run -show run
 bindsym $mod+e exec rofi -show window
-bindsym Print exec maim | xclip -selection clipboard -t image/png
-bindsym ctrl+Print exec maim -s | xclip -selection clipboard -t image/png
+bindsym $mod+c exec rofi -show calc -modi calc -no-show-match -no-sort
+bindsym $mod+m exec ~/scripts/rofi-mpd.sh -t
+bindsym $mod+Shift+q exec ~/scripts/rofi-power.sh
+bindsym Print exec maim -u | xclip -selection clipboard -t image/png
+bindsym ctrl+Print exec maim -su | xclip -selection clipboard -t image/png
 bindsym --release $mod+ctrl+Delete exec xkill
 bindsym $mod+i exec $term -e htop
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+bindsym $mod+End exec ~/scripts/mpd-pause-after-current.sh
+bindsym $mod+Shift+t exec $term -name term-scratch
+bindsym $mod+Shift+p exec ~/.config/polybar/launch.sh
+bindsym $mod+Tab exec i3-msg "workspace $(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).name' | cut -d'\"' -f2)"
 exec setxkbmap -option compose:lwin -option caps:escape
 exec xbindkeys
-exec xset r rate 250 30
+exec xset r rate 250 75
 
 # Run programs
 exec nm-applet
-#exec compton
+exec compton
 exec numlockx
 exec mpd
 exec mpdscribble
 exec $term -name main-term
-exec $term -e ranger
-exec $term -e ncmpcpp
+exec $term -name ranger -e ranger
+exec $term -name ncmpcpp -e ncmpcpp
 exec firefox-developer-edition
 #exec chromium
-#exec deluge
-exec copyq 
+exec deluge
+exec copyq
 exec telegram-desktop
 exec discord
 #exec messengerfordesktop
-#exec keepassxc
+exec keepassxc
 exec dropbox
 exec unclutter
-exec $term -e vim -c "set titlestring=notepad"
+exec $term -name notepad -e vim --servername main -S ~/Session.vim
 #exec subl3
 exec dunst
 exec $term -name term-scratch
-exec fsearch
+#exec fsearch
 exec bum
 exec redshift-gtk
 #exec thunderbird
+exec $term -name neomutt -e neomutt
+exec $term -name calcurse -e calcurse
 exec_always ~/.fehbg
 #exec synergyc 192.168.1.12
 exec udiskie --tray
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec echo S: $(date) >> ~/Documents/uptime

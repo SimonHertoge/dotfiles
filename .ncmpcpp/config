@@ -22,7 +22,8 @@
 #
 ##### connection settings #####
 #
-#mpd_host = localhost
+mpd_host = localhost
+# mpd_host = ~/.config/mpd/socket
 #
 #mpd_port = 6600
 #
@@ -109,7 +110,7 @@ visualizer_type = spectrum
 ## Time of inactivity (in seconds) after playlist highlighting will be disabled
 ## (0 = always on).
 ##
-playlist_disable_highlight_delay = 5
+playlist_disable_highlight_delay = 0
 #
 ## Defines how long messages are supposed to be visible.
 ##
@@ -270,7 +271,7 @@ playlist_disable_highlight_delay = 5
 ## Note: Custom command that will be executed each time song changes. Useful for
 ## notifications etc.
 ##
-#execute_on_song_change = ""
+#execute_on_song_change = "~/scripts/ncmpcpp-albumart.sh"
 #
 ##
 ## Note: Custom command that will be executed each time player state
@@ -291,13 +292,13 @@ playlist_separate_albums = yes
 ##
 ## Note: Possible display modes: classic, columns.
 ##
-#playlist_display_mode = columns
+playlist_display_mode = columns
 #
-#browser_display_mode = classic
+browser_display_mode = columns
 #
-#search_engine_display_mode = classic
+search_engine_display_mode = columns
 #
-#playlist_editor_display_mode = classic
+playlist_editor_display_mode = columns
 #
 #discard_colors_if_item_is_selected = yes
 #
@@ -415,7 +416,7 @@ store_lyrics_in_song_dir = no
 #
 #ask_before_clearing_playlists = yes
 #
-#clock_display_seconds = no
+clock_display_seconds = yes
 #
 #display_volume_level = yes
 #

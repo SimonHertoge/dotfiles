@@ -1,0 +1,10 @@
+prev_img k Left
+next_img j Right
+delete x Delete
+zoom_out h
+zoom_in l
+zoom_default 0
+zoom_fit s
+remove
+save_image
+save_filelist

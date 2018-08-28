@@ -1,0 +1,27 @@
+[Default Applications]
+x-scheme-handler/tg=telegramdesktop.desktop
+x-scheme-handler/chrome=chromium.desktop;
+text/html=chromium.desktop
+x-scheme-handler/about=chromium.desktop
+x-scheme-handler/ftp=Firefox-Developer-Edition.desktop;
+x-scheme-handler/http=Firefox-Developer-Edition.desktop
+x-scheme-handler/https=Firefox-Developer-Edition.desktop
+application/x-extension-htm=Firefox-Developer-Edition.desktop;
+application/x-extension-html=Firefox-Developer-Edition.desktop;
+application/x-extension-shtml=Firefox-Developer-Edition.desktop;
+application/xhtml+xml=Firefox-Developer-Edition.desktop;
+application/x-extension-xhtml=Firefox-Developer-Edition.desktop;
+application/x-extension-xht=Firefox-Developer-Edition.desktop;
+text/csv=scim.desktop;
+application/vnd.ms-excel=scim.desktop;
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=scim.desktop;
+image/jpeg=feh.desktop
+inode/directory=ranger.desktop
+image/png=feh.desktop;
+application/x-terminal-emulator=urxvt.desktop;
+
+[Added Associations]
+inode/directory=spacefm-folder-handler.desktop;
+text/csv=libreoffice-calc.desktop;
+application/octet-stream=mupdf.desktop;
+image/jpeg=feh.desktop;
