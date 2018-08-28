@@ -1,6 +1,5 @@
 alsa-plugins
 alsa-utils
-amule
 android-apktool
 android-platform
 android-sdk
@@ -29,7 +28,6 @@ ccid
 cdemu-client
 chromium
 cmatrix
-cnijfilter-mx340
 colorpicker
 compton
 copyq
@@ -47,7 +45,6 @@ dhcpcd
 dialog
 diffutils
 discord
-discord-canary
 dmenu
 docker
 docker-compose
@@ -95,7 +92,6 @@ ghostscript
 gimp
 git
 glibc
-gnome-terminal
 gparted
 gpick
 grep
@@ -113,7 +109,6 @@ htop
 httpie
 i3-gaps-next-git
 i3ass
-i3lock-fancy-git
 i3status
 imwheel
 inetutils
@@ -166,7 +161,6 @@ mpd-git
 mpdscribble
 mpv
 msmtp
-mt7610u_wifi_sta-alt
 mupdf
 mysql-workbench
 nano
