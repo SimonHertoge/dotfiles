@@ -1,0 +1,230 @@
+* Emacs configuration
+** Require packages
+#+BEGIN_SRC emacs-lisp
+  ;; Require packages
+  (use-package all-the-icons)
+  (use-package auctex
+  :defer t)
+  (use-package beacon)
+  (use-package deadgrep)
+  (use-package dired-sidebar)
+  (use-package exwm)
+  ;; (use-package helm)
+  (use-package ibuffer-sidebar)
+  (use-package lorem-ipsum)
+  (use-package magit)
+  (use-package multiple-cursors)
+  (use-package org)
+  (use-package persistent-scratch)
+  (use-package projectile)
+  (use-package right-click-context)
+  (use-package syntax-subword)
+  (use-package vlf)
+  (use-package which-key)
+#+END_SRC
+
+** Org-mode config
+#+BEGIN_SRC emacs-lisp
+(require 'org-mouse)
+(setq org-support-shift-select t)
+#+END_SRC
+
+** COMMENT Evil mode
+#+BEGIN_SRC emacs-lisp
+(use-package evil)
+(use-package evil-mc)
+(evil-mode 1)
+#+END_SRC
+
+** Load theme
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package nord-theme)
+  ;; (use-package cyberpunk-theme)
+  ;; (use-package gruvbox-theme
+  ;;   :defer t
+  ;;   :init
+  ;;   (load-theme 'gruvbox-dark-hard t))
+  (use-package spacemacs-theme
+    :defer t
+    :init (load-theme 'spacemacs-dark t))
+  ;; (use-package zenburn-theme)
+#+END_SRC
+
+** GUI functions
+#+BEGIN_SRC emacs-lisp
+(defun sidebar-toggle ()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+#+END_SRC
+
+** Custom keyboard functions
+#+BEGIN_SRC emacs-lisp
+  (defun end-of-line-and-new-line ()
+    (interactive)
+    (end-of-line)
+    (newline))
+#+END_SRC
+
+** Custom mouse functions
+#+BEGIN_SRC emacs-lisp
+    (defun mouse-start-rectangle (start-event)
+      (interactive "e")
+      (deactivate-mark)
+      (mouse-set-point start-event)
+      (rectangle-mark-mode +1)
+      (let ((drag-event))
+	(track-mouse
+	  (while (progn
+		   (setq drag-event (read-event))
+		   (mouse-movement-p drag-event))
+	    (mouse-set-point drag-event)))))
+#+END_SRC
+
+** GUI settings
+ #+BEGIN_SRC emacs-lisp
+   (cua-mode 1)
+   (tool-bar-mode -1)
+   (menu-bar-mode -1)
+   (scroll-bar-mode -1)
+   (global-display-line-numbers-mode)
+   (delete-selection-mode 1)
+   (global-hl-line-mode t)
+   (global-prettify-symbols-mode t)
+   (sidebar-toggle)
+   (beacon-mode 1)
+   (which-key-mode)
+   (desktop-save-mode 1)
+   (global-syntax-subword-mode)
+   (add-hook 'emacs-lisp-mode-hook
+    (lambda ()
+      (push '(">=" . ?≥) prettify-symbols-alist)))
+   (setq-default cursor-type 'bar) 
+   (setq inhibit-startup-message t)
+   (setq scroll-conservatively 100)
+   (setq custom-file (concat user-emacs-directory "/custom.el"))
+   (setq beacon-blink-when-window-scrolls nil)
+   ;; (setq syntax-subword-skip-spaces t)
+ #+END_SRC
+
+** Mode settings
+#+BEGIN_SRC emacs-lisp
+(setq initial-major-mode (quote text-mode))
+#+END_SRC
+
+** Minor settings
+*** Type y/n instead of yes/no at prompts
+ #+BEGIN_SRC emacs-lisp
+ (defalias 'yes-or-no-p 'y-or-n-p)
+ #+END_SRC
+
+*** Stop closing other windows when ESC-ESC-ESC
+ #+BEGIN_SRC emacs-lisp
+ (defadvice keyboard-escape-quit
+   (around keyboard-escape-quit-dont-close-windows activate)
+   (let ((buffer-quit-function (lambda () ())))
+     ad-do-it))
+ #+END_SRC
+
+*** Open new empty buffer (by xah)
+#+BEGIN_SRC emacs-lisp
+  (defun xah-new-empty-buffer ()
+    (interactive)
+    (let (($buf (generate-new-buffer "untitled")))
+      (switch-to-buffer $buf)
+      (funcall initial-major-mode)
+      (setq buffer-offer-save t)
+      $buf))
+#+END_SRC
+
+*** Sane buffer cycling (by xah)
+#+BEGIN_SRC emacs-lisp
+  (defun user-buffer-q ()
+    (interactive)
+    (if (string-equal "*" (substring (buffer-name) 0 1))
+	nil
+      (if (string-equal major-mode "dired-mode")
+	  nil
+	t)))
+
+  (defun next-user-buffer ()
+    (interactive)
+    (next-buffer)
+    (let ((i 0))
+      (while (< i 20)
+	(if (not (user-buffer-q))
+	    (progn (next-buffer)
+		   (setq i (1+ i)))
+	  (progn (setq i 100))))))
+
+  (defun previous-user-buffer ()
+    (interactive)
+    (previous-buffer)
+    (let ((i 0))
+      (while (< i 20)
+	(if (not (user-buffer-q))
+	    (progn (previous-buffer)
+		   (setq i (1+ i)))
+	  (progn (setq i 100))))))
+#+END_SRC
+
+*** Duplicate line
+#+BEGIN_SRC emacs-lisp
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+#+END_SRC
+
+*** Automatically wrap i-search
+#+BEGIN_SRC emacs-lisp
+  ;; Prevents issue where you have to press backspace twice when
+  ;; trying to remove the first character that fails a search
+  (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+  (defadvice isearch-search (after isearch-no-fail activate)
+    (unless isearch-success
+      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)
+      (isearch-repeat (if isearch-forward 'forward))
+      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)))
+#+END_SRC
+
+** Custom key bindings.
+*** Sane buffers
+ #+BEGIN_SRC emacs-lisp
+   (global-set-key (kbd "C-x C-b") 'ibuffer)
+   (global-set-key (kbd "C-x C-n") 'xah-new-empty-buffer)
+   (global-set-key (kbd "C-x k") 'kill-this-buffer)
+   (global-set-key (kbd "<C-tab>") 'next-buffer)
+   (global-set-key (kbd "<C-S-iso-lefttab>") 'previous-buffer)
+ #+END_SRC
+
+*** Sublime-like keys
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-S-d") 'duplicate-line)
+  (global-set-key (kbd "C-S-l") 'mc/edit-lines)
+  (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "<M-f3>") 'mc/mark-all-like-this)
+  (define-key mc/keymap (kbd "<return>") nil)
+  (global-set-key (kbd "<C-return>") 'end-of-line-and-new-line)
+#+END_SRC
+
+*** Stop ESC-ESC-ESC, hoping this won't break anything...
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+END_SRC
+
+*** Easier on the fingers
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-,") 'beginning-of-buffer)
+  (global-set-key (kbd "M-.") 'end-of-buffer)
+#+END_SRC
+
