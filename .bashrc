@@ -17,6 +17,6 @@ alias ka='killall'
 
 export BROWSER="firefox-developer-edition"
 export EDITOR="vim"
-export FZF_CTRL_T_COMMAND="fd -H -E '/mnt/'"
+export FZF_CTRL_T_COMMAND="fd -H -E '/mnt/' ."
 
 exec fish

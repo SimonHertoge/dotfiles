@@ -93,6 +93,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'svermeulen/vim-easyclip'
 Plug 'haya14busa/incsearch.vim'
 Plug 'francoiscabrol/ranger.vim'
+Plug 'davidhalter/jedi-vim'
 " Plug 'chrisbra/Recover.vim'
 " Plug 'kshenoy/vim-signature'
 " Plug 'junegunn/vim-peekaboo'
@@ -110,6 +111,7 @@ let g:EasyClipUseSubstituteDefaults = 1
 let g:EasyClipAutoFormat = 1
 let g:AutoPairs = {'{':'}'}
 let g:incsearch#auto_nohlsearch = 0
+let g:polyglot_disabled = ['latex']
 
 "" Theming
 hi CursorLine cterm=none ctermbg=235 ctermfg=none
@@ -181,6 +183,7 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+au VimResized * wincmd =
 
 "" Commands
 command! ReloadConfig :so ~/.vimrc

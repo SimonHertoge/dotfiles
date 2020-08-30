@@ -25,7 +25,7 @@ do
 	if [ "$newcount" -gt "0" ]
 	then
 		notify "$account" "$newcount" & disown
-		mpv --really-quiet ~/.config/mutt/etc/notify.opus
+		# mpv --really-quiet ~/.config/mutt/etc/notify.opus
 	fi
 done
 notmuch new

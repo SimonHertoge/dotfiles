@@ -17,5 +17,5 @@ fi
 timeout 5 parecord -d reverse-stereo.monitor ${RECORD_FOLDER}/${RECORD_FILE} > /dev/null 2>&1
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-python2 ${DIR}/libs/identify_sound.py -s ${RECORD_FOLDER}/${RECORD_FILE} -c libs/shazam.conf
+python2 ${DIR}/libs/identify_sound.py -s ${RECORD_FOLDER}/${RECORD_FILE} -c ${DIR}/libs/shazam.conf
 

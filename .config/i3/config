@@ -6,18 +6,18 @@ set $mod Mod1
 set $term urxvt
 
 # Cosmetic settings
-hide_edge_borders both
+hide_edge_borders smart
 for_window [class="^.*"] border pixel 3
 bindsym $mod+z gaps inner current plus 5
 bindsym $mod+Shift+z gaps inner current minus 5
 font pango:Awesome 8, monospace 8
-gaps inner 10
-gaps outer 0
-smart_gaps on
+# gaps inner 10
+# gaps outer 0
+# smart_gaps on
 
 # Colors
 # class                 border  backgr. text    indicator
-# client.focused          #4c7899 #FF0000 #ffffff #FF0000
+client.focused          #4c7899 #FF0000 #ffffff #FF0000
 client.focused_inactive #000000 #5f676a #ffffff #484e50
 client.unfocused        #333333 #222222 #888888 #292d2e
 client.urgent           #2f343a #900000 #ffffff #900000
@@ -26,8 +26,8 @@ client.urgent           #2f343a #900000 #ffffff #900000
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 floating_modifier $mod
-# focus_on_window_activation focus
-workspace_auto_back_and_forth yes
+focus_on_window_activation focus
+#workspace_auto_back_and_forth yes
 
 # Window key bindings
 bindsym $mod+q kill
@@ -155,20 +155,20 @@ bindsym XF86AudioRaiseVolume exec pamixer -i 2 --allow-boost
 bindsym Insert exec mpc prev
 bindsym Home exec mpc toggle
 bindsym Prior exec mpc next
-bindsym $mod+Ctrl+l exec mpc pause; exec echo "L: $(date)" >> ~/Documents/uptime; exec "~/scripts/i3lock.sh -n; echo U: $(date) >> ~/Documents/uptime"
+bindsym $mod+Ctrl+l exec mpc pause; exec echo "L: $(date)" >> ~/Documents/uptime; exec "~/scripts/i3lock -n; echo U: $(date) >> ~/Documents/uptime"
 bindsym $mod+d exec rofi -modi drun -show drun
 bindsym $mod+Shift+d exec rofi -modi run -show run
 bindsym $mod+e exec rofi -show window
 bindsym $mod+c exec rofi -show calc -modi calc -no-show-match -no-sort
-bindsym $mod+m exec ~/scripts/rofi-mpd.sh -t
-bindsym $mod+Shift+q exec ~/scripts/rofi-power.sh
+bindsym $mod+m exec ~/scripts/rofi-mpd -t
+bindsym $mod+Shift+q exec ~/scripts/rofi-power
 bindsym Print exec maim -u | xclip -selection clipboard -t image/png
 bindsym ctrl+Print exec maim -su | xclip -selection clipboard -t image/png
 bindsym --release $mod+ctrl+Delete exec xkill
 bindsym $mod+i exec $term -e htop
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
-bindsym $mod+End exec ~/scripts/mpd-pause-after-current.sh
+bindsym $mod+End exec ~/scripts/mpd-pause-after-current
 bindsym $mod+Shift+t exec $term -name term-scratch
 bindsym $mod+Shift+p exec ~/.config/polybar/launch.sh
 bindsym $mod+Tab exec i3-msg "workspace $(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).name' | cut -d'\"' -f2)"
@@ -182,12 +182,12 @@ exec compton
 exec numlockx
 exec mpd
 exec mpdscribble
-exec $term -name main-term
+#exec $term -name main-term
 exec $term -name ranger -e ranger
 exec $term -name ncmpcpp -e ncmpcpp
 exec firefox-developer-edition
 #exec chromium
-exec deluge
+#exec deluge
 exec copyq
 exec telegram-desktop
 exec discord
@@ -200,11 +200,11 @@ exec $term -name notepad -e vim --servername main -S ~/Session.vim
 exec dunst
 exec $term -name term-scratch
 #exec fsearch
-exec bum
+# exec bum
 exec redshift-gtk
 #exec thunderbird
-exec $term -name neomutt -e neomutt
-exec $term -name calcurse -e calcurse
+# exec $term -name neomutt -e neomutt
+# exec $term -name calcurse -e calcurse
 exec_always ~/.fehbg
 #exec synergyc 192.168.1.12
 exec udiskie --tray

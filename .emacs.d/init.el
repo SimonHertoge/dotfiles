@@ -1,3 +1,9 @@
+;; Set sane GC values
+(setq gc-cons-threshold (* 1024 1024 1024))
+(setq gc-cons-percentage 0.5)
+(run-with-idle-timer 60 t #'garbage-collect)
+(setq garbage-collection-messages t)
+
 ;; Set up package repos
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -27,3 +33,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'upcase-region 'disabled nil)

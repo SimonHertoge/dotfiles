@@ -22,7 +22,7 @@ col = #00f
 bottom = false
 locale = nl_BE.UTF-8
 #monitor = eDP1
-monitor = HDMI-1
+monitor = HDMI-0
 width = 100%
 height = 24
 ;offset-x = 1%
@@ -172,7 +172,7 @@ label-urgent-padding = ${module/bspwm.label-urgent-padding}
 
 [module/mpd]
 type = internal/mpd
-format-online = %{A1:i3-msg 'workspace 4':}%{A3:~/scripts/lastfm-open-current-track.py:}<label-song> <label-time>%{A}%{A}
+format-online = %{A1:i3-msg 'workspace 4':}%{A3:lastfm-open-current-track:}<label-song> <label-time>%{A}%{A}
 format-offline = <label-offline>
 #<icon-prev> <toggle> <icon-next>
 #<toggle>

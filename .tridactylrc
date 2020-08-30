@@ -1,0 +1,14 @@
+unbind a
+unbind A
+unbind <c-f>
+unbind <c-u>
+bind j scrollline 7
+bind k scrollline -7
+bind d scrollpage 0.5
+bind u scrollpage -0.5
+bind x tabclose
+bind X undo
+bind J tabnext
+bind K tabprev
+bind m bmark
+bind af hint -qb

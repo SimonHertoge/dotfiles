@@ -2,7 +2,7 @@
 # ~/.bash_profile
 #
 
-export PATH=$PATH:~/.gem/ruby/2.4.0/bin:~/scripts
+export PATH=$PATH:~/.gem/ruby/2.4.0/bin:~/scripts:~/.emacs.d/bin
 export PAGER='less -M +Gg'
 #export MPD_HOST=~/.config/mpd/socket
 

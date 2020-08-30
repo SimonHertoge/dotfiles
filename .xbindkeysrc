@@ -75,6 +75,9 @@
     Control + b:8
 "xdotool key XF86Forward"
     Control + b:9
+# Undo close tab with DPI button
+"xdotool key Ctrl+Shift+T"
+    b:10
 # Up/Down in fsearch
 # "~/scripts/fsearch-keys.sh Down"
 #     control + j

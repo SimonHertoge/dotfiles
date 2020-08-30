@@ -1,42 +1,190 @@
-* Emacs configuration
-** Require packages
+* Require packages
 #+BEGIN_SRC emacs-lisp
-  ;; Require packages
-  (use-package all-the-icons)
-  (use-package auctex
-  :defer t)
-  (use-package beacon)
-  (use-package deadgrep)
-  (use-package dired-sidebar)
-  (use-package exwm)
-  ;; (use-package helm)
-  (use-package ibuffer-sidebar)
-  (use-package lorem-ipsum)
-  (use-package magit)
-  (use-package multiple-cursors)
-  (use-package org)
-  (use-package persistent-scratch)
-  (use-package projectile)
-  (use-package right-click-context)
-  (use-package syntax-subword)
-  (use-package vlf)
-  (use-package which-key)
+    ;; Require packages
+    (use-package all-the-icons)
+    (use-package beacon)
+    (use-package deadgrep)
+    (use-package dired-sidebar)
+    ;; (use-package helm)
+    (use-package ibuffer-sidebar)
+    (use-package lorem-ipsum)
+    (use-package magit)
+    (use-package move-dup)
+    (use-package pandoc-mode)
+    (use-package persistent-scratch)
+    (use-package projectile)
+    ;; (use-package right-click-context)
+    ;; (use-package syntax-subword)
+    (use-package vlf)
+    (use-package which-key)
 #+END_SRC
 
-** Org-mode config
+* Auctex
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex
+  :defer t)
+#+END_SRC
+
+* Org-mode
+** Org basic
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :init
+    (add-hook 'org-mode-hook '(lambda () (define-key org-mode-map [(control tab)] nil)))
+    (add-hook 'org-mode-hook '(lambda () (define-key org-mode-map [(control ?,)] nil)))
+    (add-hook 'org-mode-hook '(lambda () (define-key org-mode-map [(control ?/)] nil)))
+    (setq org-use-speed-commands t))
+#+END_SRC
+
+** Org extensions
 #+BEGIN_SRC emacs-lisp
 (require 'org-mouse)
 (setq org-support-shift-select t)
+(use-package org-bullets
+:init
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
 
-** COMMENT Evil mode
+* COMMENT Exwm config
+** Load exwm
+#+BEGIN_SRC emacs-lisp
+  (use-package exwm
+    :init
+    (require 'exwm-config)
+    (require 'exwm-systemtray)
+    (exwm-enable)
+    (exwm-systemtray-enable)
+    (exwm-config-ido))
+#+END_SRC
+
+** Settings
+#+BEGIN_SRC emacs-lisp
+  (setq exwm-workspace-number 4)
+  (setq window-divider-default-right-width 1)
+  (setq exwm-layout-show-all-buffers t)
+  (setq exwm-workspace-show-all-buffers t)
+  (window-divider-mode)
+#+END_SRC
+
+** Initial workspace
+#+BEGIN_SRC emacs-lisp
+  ;; Set the initial workspace number.
+  (unless (get 'exwm-workspace-number 'saved-value)
+  (setq exwm-workspace-number 1))
+#+END_SRC
+
+** Make class name the buffer name
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'exwm-update-class-hook
+	    (lambda ()
+	      (exwm-workspace-rename-buffer exwm-class-name)))
+#+END_SRC
+
+** Global keybindings
+#+BEGIN_SRC emacs-lisp
+  (unless (get 'exwm-input-global-keys 'saved-value)
+    (setq exwm-input-global-keys
+	  `(
+	    ;; Reset (to line-mode).
+	    ([?\s-r] . exwm-reset)
+	    ;; Switch workspace.
+	    ([?\s-w] . exwm-workspace-switch)
+	    ;; Launch application.
+	    ([?\s-d] . (lambda (command)
+			 (interactive (list (read-shell-command "$ ")))
+			 (start-process-shell-command command nil command)))
+	    ;; Quit application.
+	    ([?\s-q] . kill-this-buffer)
+	    ;; Switch applications.
+	    ([?\s-p] . ido-switch-buffer)
+	    ;; Next application.
+	    (,(kbd "s-[") . previous-buffer)
+	    ;; Previous application.
+	    (,(kbd "s-]") . next-buffer)
+	    ;; 's-N': Switch to certain workspace.
+	    ,@(mapcar (lambda (i)
+			`(,(kbd (format "s-%d" i)) .
+			  (lambda ()
+			    (interactive)
+			    (exwm-workspace-switch-create ,i))))
+		      (number-sequence 0 9)))))
+#+END_SRC
+
+** Simulation keys
+#+BEGIN_SRC emacs-lisp
+    (unless (get 'exwm-input-simulation-keys 'saved-value)
+      (setq exwm-input-simulation-keys
+	    '(([?\C-b] . [left])
+	      ([?\C-f] . [right])
+	      ([?\C-p] . [up])
+	      ([?\C-n] . [down])
+	      ([?\C-a] . [home])
+	      ([?\C-\S-a] . [C-S-home])
+	      ([?\C-e] . [end])
+	      ([?\C-\S-e] . [C-S-end])
+	      ([?\M-v] . [prior])
+	      ([?\C-d] . [delete])
+	      ([?\C-x ?h] . [C-a])
+	      ([?\C-s] . [C-f])
+	      )))
+#+END_SRC
+
+** Prefix keys
+#+BEGIN_SRC emacs-lisp
+  (define-key exwm-mode-map (kbd "C-c") nil)
+#+END_SRC
+
+** Mouse focus
+#+BEGIN_SRC emacs-lisp
+(setq mouse-autoselect-window t
+      focus-follows-mouse t)
+#+END_SRC
+** COMMENT Exwm-edit
+#+BEGIN_SRC emacs-lisp
+(use-package exwm-edit)
+#+END_SRC
+
+** Switch workspaces
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-S-d") 'exwm-workspace-switch)
+#+END_SRC
+
+** Autostart
+#+BEGIN_SRC emacs-lisp
+  ;; (start-process-shell-command NAME BUFFER COMMAND)
+  (setq apps '("nm-applet" "numlockx" "mpd" "telegram-desktop" "discord" "dropbox" "dunst" "redshift-gtk" "udiskie --tray" "keepassxc" "setxkbmap -option caps:escape" "xbindkeys" "xset r rate 250 75"))
+  (dolist (el apps nil)
+    (if (not (get-process el))
+	(start-process-shell-command el nil el)))
+#+END_SRC
+
+* COMMENT Buffer flip
+#+BEGIN_SRC emacs-lisp
+(use-package buffer-flip
+  :bind  (("M-<tab>" . buffer-flip)
+          :map buffer-flip-map
+          ( "M-<tab>" .   buffer-flip-forward) 
+          ( "<M-iso-lefttab>" . buffer-flip-backward) 
+          ( "M-ESC" .     buffer-flip-abort)))
+#+END_SRC
+
+* Better? buffer flip
+#+BEGIN_SRC emacs-lisp
+(use-package iflipb
+:init
+(setq iflipb-wrap-around t)
+(global-set-key (kbd "M-<tab>") 'iflipb-next-buffer)
+(global-set-key (kbd "M-<iso-lefttab>") 'iflipb-previous-buffer))
+#+END_SRC
+
+* COMMENT Evil mode
 #+BEGIN_SRC emacs-lisp
 (use-package evil)
 (use-package evil-mc)
 (evil-mode 1)
 #+END_SRC
 
-** Load theme
+* Load theme
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nord-theme)
   ;; (use-package cyberpunk-theme)
@@ -50,7 +198,7 @@
   ;; (use-package zenburn-theme)
 #+END_SRC
 
-** GUI functions
+* GUI functions
 #+BEGIN_SRC emacs-lisp
 (defun sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
@@ -59,7 +207,8 @@
   (ibuffer-sidebar-toggle-sidebar))
 #+END_SRC
 
-** Custom keyboard functions
+* Custom functions
+** Create newline below
 #+BEGIN_SRC emacs-lisp
   (defun end-of-line-and-new-line ()
     (interactive)
@@ -67,7 +216,7 @@
     (newline))
 #+END_SRC
 
-** Custom mouse functions
+** Rectangle mouse selection
 #+BEGIN_SRC emacs-lisp
     (defun mouse-start-rectangle (start-event)
       (interactive "e")
@@ -82,52 +231,70 @@
 	    (mouse-set-point drag-event)))))
 #+END_SRC
 
-** GUI settings
- #+BEGIN_SRC emacs-lisp
-   (cua-mode 1)
-   (tool-bar-mode -1)
-   (menu-bar-mode -1)
-   (scroll-bar-mode -1)
-   (global-display-line-numbers-mode)
-   (delete-selection-mode 1)
-   (global-hl-line-mode t)
-   (global-prettify-symbols-mode t)
-   (sidebar-toggle)
-   (beacon-mode 1)
-   (which-key-mode)
-   (desktop-save-mode 1)
-   (global-syntax-subword-mode)
-   (add-hook 'emacs-lisp-mode-hook
-    (lambda ()
-      (push '(">=" . ?≥) prettify-symbols-alist)))
-   (setq-default cursor-type 'bar) 
-   (setq inhibit-startup-message t)
-   (setq scroll-conservatively 100)
-   (setq custom-file (concat user-emacs-directory "/custom.el"))
-   (setq beacon-blink-when-window-scrolls nil)
-   ;; (setq syntax-subword-skip-spaces t)
- #+END_SRC
+* GUI settings
+#+BEGIN_SRC emacs-lisp
+  (cua-mode 1)
+  (tool-bar-mode -1)
+  (menu-bar-mode 1)
+  (fringe-mode 1)
+  ;; (scroll-bar-mode -1)
+  ;; (global-display-line-numbers-mode)
+  (delete-selection-mode 1)
+  (global-prettify-symbols-mode t)
+  ;; (sidebar-toggle)
+  (beacon-mode 1)
+  (which-key-mode)
+  (desktop-save-mode 1)
+  ;; (global-syntax-subword-mode)
+  (display-time-mode t)
+  ;; (winner-mode)
+  (show-paren-mode 1)
+  (add-hook 'emacs-lisp-mode-hook
+   (lambda ()
+     (push '(">=" . ?≥) prettify-symbols-alist)))
+  (setq-default cursor-type 'bar) 
+  (setq inhibit--message t)
+  (setq scroll-conservatively 100)
+  (setq custom-file (concat user-emacs-directory "/custom.el"))
+  (setq beacon-blink-when-window-scrolls nil)
+  ;; (setq syntax-subword-skip-spaces t)
+  (setq display-time-default-load-average nil)
+  (setq display-time-24hr-format t)
+  (setq show-paren-delay 0)
+  (setq visible-bell 1)
+  ;; (setq indent-tabs-mode nil)
+  (setq desktop-load-locked-desktop t)
+  (setq buffers-menu-max-size nil)
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+END_SRC
 
-** Mode settings
+** Emacsclient hooks
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'focus-in-hook
+            (lambda ()
+              (global-display-line-numbers-mode)))
+#+END_SRC
+
+* Mode settings
 #+BEGIN_SRC emacs-lisp
 (setq initial-major-mode (quote text-mode))
 #+END_SRC
 
-** Minor settings
-*** Type y/n instead of yes/no at prompts
- #+BEGIN_SRC emacs-lisp
- (defalias 'yes-or-no-p 'y-or-n-p)
- #+END_SRC
+* Minor settings
+** Type y/n instead of yes/no at prompts
+#+BEGIN_SRC emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
 
-*** Stop closing other windows when ESC-ESC-ESC
- #+BEGIN_SRC emacs-lisp
- (defadvice keyboard-escape-quit
-   (around keyboard-escape-quit-dont-close-windows activate)
-   (let ((buffer-quit-function (lambda () ())))
-     ad-do-it))
- #+END_SRC
+** Stop closing other windows when ESC-ESC-ESC
+#+BEGIN_SRC emacs-lisp
+(defadvice keyboard-escape-quit
+  (around keyboard-escape-quit-dont-close-windows activate)
+  (let ((buffer-quit-function (lambda () ())))
+    ad-do-it))
+#+END_SRC
 
-*** Open new empty buffer (by xah)
+** Open new empty buffer (by xah)
 #+BEGIN_SRC emacs-lisp
   (defun xah-new-empty-buffer ()
     (interactive)
@@ -138,7 +305,29 @@
       $buf))
 #+END_SRC
 
-*** Sane buffer cycling (by xah)
+** Automatically wrap i-search
+#+BEGIN_SRC emacs-lisp
+  ;; Prevents issue where you have to press backspace twice when
+  ;; trying to remove the first character that fails a search
+  (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+  (defadvice isearch-search (after isearch-no-fail activate)
+    (unless isearch-success
+      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)
+      (isearch-repeat (if isearch-forward 'forward))
+      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)))
+#+END_SRC
+
+** Align with spaces
+#+BEGIN_SRC emacs-lisp
+  (defadvice align-regexp (around align-regexp-with-spaces activate)
+    (let ((indent-tabs-mode nil))
+      ad-do-it))
+#+END_SRC
+* Sane (key) settings
+** Sane buffer cycling (by xah)
 #+BEGIN_SRC emacs-lisp
   (defun user-buffer-q ()
     (interactive)
@@ -169,62 +358,508 @@
 	  (progn (setq i 100))))))
 #+END_SRC
 
-*** Duplicate line
+** Sane window splitting
 #+BEGIN_SRC emacs-lisp
-  (defun duplicate-line()
+  (global-set-key "\C-x2" (lambda () (interactive)(split-window-vertically) (other-window 1)))
+  (global-set-key "\C-x3" (lambda () (interactive)(split-window-horizontally) (other-window 1)))
+#+END_SRC
+
+** Sane capitalizing
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-u") 'upcase-dwim)
+(global-set-key (kbd "M-l") 'downcase-dwim)
+(global-set-key (kbd "M-c") 'capitalize-dwim)
+#+END_SRC
+
+** Sane buffers
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x b") 'ibuffer)
+  (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+  (global-set-key (kbd "C-x C-n") 'xah-new-empty-buffer)
+  (global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+  (global-set-key (kbd "<C-tab>") 'next-buffer)
+  (global-set-key (kbd "<C-S-tab>") 'previous-buffer)
+  (global-set-key (kbd "<C-S-iso-lefttab>") 'previous-buffer)
+#+END_SRC
+
+** Sane delete (by xah)
+Delete words without copying them
+#+BEGIN_SRC emacs-lisp
+  (defun my-delete-word (arg)
+    (interactive "p")
+    (delete-region
+     (point)
+     (progn
+       (forward-word arg)
+       (point))))
+
+  (defun my-backward-delete-word (arg)
+    (interactive "p")
+    (my-delete-word (- arg)))
+
+  (defun my-delete-line ()
     (interactive)
-    (move-beginning-of-line 1)
-    (kill-line)
-    (yank)
-    (open-line 1)
-    (next-line 1)
-    (yank))
+    (delete-region
+     (point)
+     (progn (end-of-line 1) (point)))
+    (delete-char 1))
+
+  (defun my-delete-line-backward ()
+    (interactive)
+    (let (p1 p2)
+      (setq p1 (point))
+      (beginning-of-line 1)
+      (setq p2 (point))
+      (delete-region p1 p2)))
+
+  ; bind them to emacs's default shortcut keys:
+  (global-set-key (kbd "C-S-k") 'my-delete-line-backward)
+  (global-set-key (kbd "C-k") 'my-delete-line)
+  (global-set-key (kbd "M-d") 'my-delete-word)
+  (global-set-key (kbd "<M-backspace>") 'my-backward-delete-word)
+  (global-set-key (kbd "<C-backspace>") 'my-backward-delete-word)
 #+END_SRC
 
-*** Automatically wrap i-search
+** Sublime-like keys
 #+BEGIN_SRC emacs-lisp
-  ;; Prevents issue where you have to press backspace twice when
-  ;; trying to remove the first character that fails a search
-  (define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
-
-  (defadvice isearch-search (after isearch-no-fail activate)
-    (unless isearch-success
-      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)
-      (isearch-repeat (if isearch-forward 'forward))
-      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)))
-#+END_SRC
-
-** Custom key bindings.
-*** Sane buffers
- #+BEGIN_SRC emacs-lisp
-   (global-set-key (kbd "C-x C-b") 'ibuffer)
-   (global-set-key (kbd "C-x C-n") 'xah-new-empty-buffer)
-   (global-set-key (kbd "C-x k") 'kill-this-buffer)
-   (global-set-key (kbd "<C-tab>") 'next-buffer)
-   (global-set-key (kbd "<C-S-iso-lefttab>") 'previous-buffer)
- #+END_SRC
-
-*** Sublime-like keys
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-S-d") 'duplicate-line)
-  (global-set-key (kbd "C-S-l") 'mc/edit-lines)
+  (global-set-key (kbd "C-S-d") 'md-duplicate-down)
+  (global-set-key (kbd "C-S-l") 'mc/edit-ends-of-lines)
   (global-set-key (kbd "C-.") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-M-<up>") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-M-<down>") 'mc/mark-next-like-this)
   (global-set-key (kbd "<M-f3>") 'mc/mark-all-like-this)
-  (define-key mc/keymap (kbd "<return>") nil)
-  (global-set-key (kbd "<C-return>") 'end-of-line-and-new-line)
+  ;; (global-set-key (kbd "<C-return>") 'end-of-line-and-new-line)
+  (global-set-key (kbd "C-/") 'comment-line)
+  (global-set-key (kbd "C-S-<up>") 'md-move-lines-up)
+  (global-set-key (kbd "C-S-<down>") 'md-move-lines-down)
+  (global-unset-key (kbd "M-<down-mouse-1>"))
+  (global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)
 #+END_SRC
 
-*** Stop ESC-ESC-ESC, hoping this won't break anything...
+** Vim-like keys
+#+BEGIN_SRC emacs-lisp
+  (define-key key-translation-map (kbd "M-[") (kbd "M-{"))
+  (define-key key-translation-map (kbd "M-]") (kbd "M-}"))
+#+END_SRC
+
+** Other keys
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<C-M-backspace>") 'kill-word)
+(global-set-key (kbd "C-r") 'replace-string)
+(global-set-key (kbd "C-S-r") 'replace-regexp)
+(global-set-key (kbd "M-o") 'counsel-outline)
+#+END_SRC
+
+** Stop ESC-ESC-ESC, hoping this won't break anything...
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+END_SRC
 
-*** Easier on the fingers
+** Easier on the fingers
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "M-,") 'beginning-of-buffer)
   (global-set-key (kbd "M-.") 'end-of-buffer)
+#+END_SRC
+
+* COMMENT Ido mode
+#+BEGIN_SRC emacs-lisp
+  (setq ido-enable-flex-matching nil)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-use-virtual-buffers t)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+#+END_SRC
+n
+** Ido-ubiquitous
+#+BEGIN_SRC emacs-lisp
+  (use-package ido-completing-read+
+  :init
+  (ido-ubiquitous-mode 1))
+#+END_SRC
+
+** Ido-vertical
+ #+BEGIN_SRC emacs-lisp
+   (use-package ido-vertical-mode
+     :init
+     (ido-vertical-mode 1))
+   (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+ #+END_SRC
+
+* COMMENT Smex
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+  :init (smex-initialize)
+  :bind ("M-x" . smex))
+#+END_SRC
+
+* Buffers
+** COMMENT Expert mode
+#+BEGIN_SRC emacs-lisp
+(setq ibuffer-expert t)
+#+END_SRC
+
+* Avy
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+  :bind
+  ("M-s" . avy-goto-char-2)
+  ("C-;" . avy-goto-char-2))
+#+END_SRC
+
+* Config edit/reload
+** COMMENT Edit
+#+BEGIN_SRC emacs-lisp
+  (defun config-visit ()
+  (interactive)
+  (find-file "~/.emacs.d/config.org"))
+  (global-set-key (kbd "C-c e") 'config-visit)
+#+END_SRC
+
+** Reload
+#+BEGIN_SRC emacs-lisp
+  (defun config-reload ()
+  (interactive)
+  (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+  (global-set-key (kbd "C-x C-r") 'config-reload)
+#+END_SRC
+
+** Rainbow
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-mode
+:init (rainbow-mode 1))
+#+END_SRC
+
+* Expand region
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+:bind ("C-w" . er/expand-region)
+:bind ("C-S-w" . er/contract-region))
+#+END_SRC
+
+* Eshell
+** Add image mode
+#+BEGIN_SRC emacs-lisp
+(defun my/iimage-mode-refresh--eshell/cat (orig-fun &rest args)
+  "Display image when using cat on it."
+  (let ((image-path (cons default-directory iimage-mode-image-search-path)))
+    (dolist (arg args)
+      (let ((imagep nil)
+            file)
+        (with-silent-modifications
+          (save-excursion
+            (dolist (pair iimage-mode-image-regex-alist)
+              (when (and (not imagep)
+                         (string-match (car pair) arg)
+                         (setq file (match-string (cdr pair) arg))
+                         (setq file (locate-file file image-path)))
+                (setq imagep t)
+                (add-text-properties 0 (length arg)
+                                     `(display ,(create-image file)
+                                               modification-hooks
+                                               (iimage-modification-hook))
+                                     arg)
+                (eshell-buffered-print arg)
+                (eshell-flush)))))
+        (when (not imagep)
+          (apply orig-fun (list arg)))))
+    (eshell-flush)))
+
+(advice-add 'eshell/cat :around #'my/iimage-mode-refresh--eshell/cat)
+#+END_SRC
+
+** Set visual (incompatible) commands
+#+BEGIN_SRC emacs-lisp
+(require 'em-term)
+(add-to-list 'eshell-visual-commands "htop")
+#+END_SRC
+
+* Desktop environment keys
+#+BEGIN_SRC emacs-lisp
+(use-package desktop-environment
+:init (desktop-environment-mode)
+(setq desktop-environment-volume-normal-increment "+2")
+(setq desktop-environment-volume-normal-decrement "-2")
+(setq desktop-environment-volume-get-command "pamixer --get-volume")
+(setq desktop-environment-volume-get-regexp "\\([0-9]+\\)")
+(setq desktop-environment-volume-set-command "a=%s; pamixer --allow-boost --set-volume $((`pamixer --get-volume`+a))")
+(setq desktop-environment-volume-toggle-command "pamixer -t --allow-boost"))
+#+END_SRC
+
+* Kill ring enhancements
+#+BEGIN_SRC emacs-lisp
+(use-package popup-kill-ring
+:bind ("C-`" . popup-kill-ring))
+#+END_SRC
+
+* Hashing functions
+** General region function
+#+BEGIN_SRC emacs-lisp
+(defun func-region (start end func)
+  "run a function over the region between START and END in current buffer."
+  (save-excursion
+    (let ((text (delete-and-extract-region start end)))
+      (insert (funcall func text)))))
+#+END_SRC
+
+** URL en/decoding
+#+BEGIN_SRC emacs-lisp
+(defun hex-region (start end)
+  "urlencode the region between START and END in current buffer."
+  (interactive "r")
+  (func-region start end #'url-hexify-string))
+
+(defun unhex-region (start end)
+  "de-urlencode the region between START and END in current buffer."
+  (interactive "r")
+  (func-region start end #'url-unhex-string))
+#+END_SRC
+
+* Save as root
+Save using ssh
+#+BEGIN_SRC emacs-lisp
+(defun sudo-save ()
+  (interactive)
+  (if (not buffer-file-name)
+      (write-file (concat "/sudo:root@localhost:" (ido-read-file-name "File:")))
+    (write-file (concat "/sudo:root@localhost:" buffer-file-name))))
+#+END_SRC
+
+Auto-open as root when no write permissions
+#+BEGIN_SRC emacs-lisp
+(use-package auto-sudoedit)
+#+END_SRC
+
+* Modeline
+** Change mouse functions
+#+BEGIN_SRC emacs-lisp
+(define-key mode-line-buffer-identification-keymap [mode-line mouse-1] 'mode-line-next-buffer)
+(define-key mode-line-buffer-identification-keymap [mode-line mouse-3] 'mode-line-previous-buffer)
+#+END_SRC
+
+* CUA mode
+#+BEGIN_SRC emacs-lisp
+(setq cua-prefix-override-inhibit-delay 0.1)
+(define-key cua-global-keymap (kbd "C-<return>") nil)
+#+END_SRC
+
+* Yasnippet
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+  :config
+  (setq yas-indent-line 'fixed))
+  
+  (use-package yasnippet-snippets
+  :config
+  (yas-reload-all))
+#+END_SRC
+
+** Hooks
+#+BEGIN_SRC emacs-lisp
+(add-hook 'LaTeX-mode-hook 'yas-minor-mode)
+(add-hook 'bibtex-mode-hook 'yas-minor-mode)
+#+END_SRC
+
+* Swiper
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :bind ("C-s" . swiper))
+#+END_SRC
+
+* Ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :init
+    (ivy-mode 1))
+#+END_SRC
+
+Settings
+#+BEGIN_SRC emacs-lisp
+(setq ivy-use-virtual-buffers t)
+(setq ivy-count-format "(%d/%d) ")
+#+END_SRC
+
+** Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :init
+    (setcdr (assoc 'counsel-M-x ivy-initial-inputs-alist) "")
+    (counsel-mode 1))
+#+END_SRC
+
+** Ivy extensions
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy-bibtex
+    :init
+    (setq bibtex-completion-bibliography
+        '("O:/School/2018 - 2019/Bachelor Thesis/src/bronnen.bib")))
+#+END_SRC
+
+* Markdown mode
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :init
+    (setq markdown-command "C:/Users/Simon/AppData/Local/Pandoc/pandoc.exe")
+    (setq markdown-asymmetric-header t)
+    (add-hook 'markdown-mode-hook '(lambda () (define-key markdown-mode-map (kbd "M-p") nil)))
+    :bind
+    ;; org-like header bindings
+    ("M-<up>" . markdown-move-up)
+    ("M-<down>" . markdown-move-down)
+    ("C-<up>" . markdown-previous-visible-heading)
+    ("C-<down>" . markdown-next-visible-heading))
+#+END_SRC
+
+* PDF-tools
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools)
+#+END_SRC
+
+* Spell check
+#+BEGIN_SRC emacs-lisp
+  (use-package flyspell
+    :defer
+    :config
+    (setq ispell-program-name (executable-find "hunspell"))
+    (setq ispell-really-hunspell t)
+    (setq ispell-dictionary "nl,en_US")
+    (ispell-set-spellchecker-params)
+    (ispell-hunspell-add-multi-dic "nl,en_US"))
+#+END_SRC
+
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck)
+#+END_SRC
+
+* Multiple cursors
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :init
+    (setq mc/always-run-for-all t)
+    :config
+    (define-key mc/keymap (kbd "<return>") nil))
+#+END_SRC
+
+* Google Translate
+#+BEGIN_SRC emacs-lisp
+(use-package google-translate)
+#+END_SRC
+
+* Company
+** Settings
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 2))
+#+END_SRC
+
+** Keys
+#+BEGIN_SRC emacs-lisp
+  (with-eval-after-load 'company
+		   (define-key company-active-map (kbd "M-n") nil)
+		   (define-key company-active-map (kbd "M-p") nil)
+		   (define-key company-active-map (kbd "C-n") #'company-select-next)
+		   (define-key company-active-map (kbd "C-p") #'company-select-previous))
+#+END_SRC
+
+* Python support
+** Elpy
+#+BEGIN_SRC emacs-lisp
+(use-package elpy
+  :init
+  (elpy-enable))
+#+END_SRC
+
+** Jedi
+#+BEGIN_SRC emacs-lisp
+(use-package jedi
+    :config
+    (add-hook 'python-mode-hook 'jedi:setup)
+    (setq jedi:complete-on-dot t))
+#+END_SRC
+
+* Buffers
+** Close buffer with middle-mouse
+#+BEGIN_SRC emacs-lisp
+(global-set-key [mouse-2] 'kill-this-buffer)
+#+END_SRC
+
+* Save hooks
+#+BEGIN_SRC emacs-lisp
+  (defun save-hooks ()
+    (when (eq major-mode 'markdown-mode)
+      (call-process-shell-command "pandoc presentatie.md -o Presentatie.pdf -t beamer --pdf-engine=xelatex &" nil 0)))
+
+  (add-hook 'after-save-hook #'save-hooks)
+#+END_SRC
+
+* Mail mode
+** Auto-fill
+#+BEGIN_SRC emacs-lisp
+(add-hook 'mail-mode-hook 'turn-on-auto-fill)
+#+END_SRC
+
+** Color per indentation level
+#+BEGIN_SRC emacs-lisp
+(add-hook 'mail-mode-hook (lambda ()
+  (setq-local fill-column 72)
+
+  (defface mail-double-quoted-text-face
+    '((((class color)) :foreground "#67b11d")
+     (((class color)) :background "#293235"))
+    "Double-quoted email." :group 'mail-faces)
+  (defface mail-triple-quoted-text-face
+    '((((class color)) :foreground "#4f97d7")
+     (((class color)) :background "#293235"))
+    "Triple-quoted email." :group 'mail-faces)
+  (defface mail-quadruple-quoted-text-face
+    '((((class color)) :foreground "#2d9574")
+     (((class color)) :background "#293235"))
+    "Quadruple-quoted email." :group 'mail-faces)
+
+  (font-lock-add-keywords 'mail-mode
+   '(("^[ \t]*>>>>.*$" . 'mail-quadruple-quoted-text-face)
+     ("^[ \t]*>>>.*$" . 'mail-triple-quoted-text-face)
+     ("^[ \t]*>>.*$" . 'mail-double-quoted-text-face)))))
+#+END_SRC
+
+* Daemon mode
+#+BEGIN_SRC emacs-lisp
+(server-start)
+#+END_SRC
+
+* Restore closed buffers
+From https://emacs.stackexchange.com/a/3334
+#+BEGIN_SRC emacs-lisp
+(defvar killed-file-list nil
+  "List of recently killed files.")
+
+(defun add-file-to-killed-file-list ()
+  "If buffer is associated with a file name, add that file to the
+`killed-file-list' when killing the buffer."
+  (when buffer-file-name
+    (push buffer-file-name killed-file-list)))
+
+(add-hook 'kill-buffer-hook #'add-file-to-killed-file-list)
+
+(defun reopen-killed-file-fancy ()
+  "Pick a file to revisit from a list of files killed during this
+Emacs session."
+  (interactive)
+  (if killed-file-list
+      (let ((file (completing-read "Reopen killed file: " killed-file-list
+                                   nil nil nil nil (car killed-file-list))))
+        (when file
+          (setq killed-file-list (cl-delete file killed-file-list :test #'equal))
+          (find-file file)))
+    (error "No recently-killed files to reopen")))
+#+END_SRC
+
+* Mouse zoom
+#+BEGIN_SRC emacs-lisp
+(global-set-key [C-wheel-up] 'text-scale-increase)
+(global-set-key [C-wheel-down] 'text-scale-decrease)
 #+END_SRC
 

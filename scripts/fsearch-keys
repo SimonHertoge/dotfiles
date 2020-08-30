@@ -1,0 +1,9 @@
+#!/bin/bash
+W=`xdotool getactivewindow`                                                     
+S1=`xprop -id ${W} | awk '/WM_CLASS/{print $4}'`                                 
+S2='"Fsearch"'                                                           
+if [ $S1 = $S2 ]; then                                                          
+    xdotool key --clearmodifiers ${1} 2>&1 >> keys.log
+else
+    echo $S1 >> keys.log
+fi

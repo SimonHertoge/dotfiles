@@ -85,7 +85,7 @@ URxvt.keysym.C-S-Return: ^[[27~
 /* URxvt.keysym.C-A-f: ^[[26~ */
 URxvt.keysym.C-Up: \033[1;5A
 URxvt.keysym.C-Down: \033[1;5B
-urXVT.keysym.C-Left: \033[1;5D
+URxvt.keysym.C-Left: \033[1;5D
 URxvt.keysym.C-Right: \033[1;5C
 URxvt.keysym.C-1: command:\033]11;#1d2021\007\033]10;#ebdbb2\007
 URxvt.keysym.C-2: command:\033]11;#ebdbb2\007\033]10;#1d2021\007
@@ -102,4 +102,10 @@ URxvt.url-select.button: 10
 URxvt.matcher.button: 1
 URxvt.keysym.C-C: perl:clipboard:copy
 URxvt.keysym.C-V: perl:clipboard:paste
+URxvt.keysym.C-t: tabbedex:new_tab
+URxvt.keysym.C-Tab: tabbedex:next_tab
+URxvt.keysym.C-S-ISO_Left_Tab: tabbedex:prev_tab
+URxvt.keysym.C-S-Left:  tabbedex:move_tab_left
+URxvt.keysym.C-S-Right: tabbedex:move_tab_right
+URxvt.tabbedex.no-tabbedex-keys: true
 URxvt.keyboard-select.clipboard: true
