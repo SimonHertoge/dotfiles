@@ -1,0 +1,102 @@
+!! DWM
+dwm.normbordercolor: #444444
+dwm.normbgcolor: #222222
+dwm.normfgcolor: #eeeeee
+dwm.selbordercolor: #FF0000
+dwm.selbgcolor: #224386
+dwm.selfgcolor: #eeeeee
+dwm.tagsselbgcolor: #224386
+dwm.titleselbgcolor: #224386
+
+!! URxvt
+URxvt.intensityStyles: false
+!Bug: 32->pixbuf always transparent
+URxvt.depth: 24
+URxvt.geometry: 130x40
+URxvt.font: xft:Ubuntu Mono:Regular:size=11
+URxvt.scrollBar: false
+URxvt.saveLines: 99999
+URxvt.cursorColor: white
+URxvt*reverseVideo: true
+URxvt.colorUL: #4682B4
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+URxvt.keysym.C-semicolon: ^[[25~
+URxvt.keysym.C-Return: ^[[26~
+URxvt.keysym.C-S-Return: ^[[27~
+URxvt.keysym.C-Up: \033[1;5A
+URxvt.keysym.C-Down: \033[1;5B
+URxvt.keysym.C-Left: \033[1;5D
+URxvt.keysym.C-Right: \033[1;5C
+URxvt.keysym.C-1: command:\033]11;#1d2021\007\033]10;#ebdbb2\007
+URxvt.keysym.C-2: command:\033]11;#ebdbb2\007\033]10;#1d2021\007
+URxvt.perl-ext-common: default,resize-font,matcher,url-select,keyboard-select,clipboard,tabbedex
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.launcher: firefox-developer-edition
+URxvt.url-select.underline: true
+URxvt.url-launcher: firefox-developer-edition
+!https://www.reddit.com/r/urxvt/comments/4xeoji/clicking_on_url_opens_the_url_twice_or_more/db3fytu/
+URxvt.url-select.button: 10
+URxvt.matcher.button: 1
+URxvt.keysym.C-C: perl:clipboard:copy
+URxvt.keysym.C-V: perl:clipboard:paste
+URxvt.keyboard-select.clipboard: true
+
+!! XTerm
+XTerm*utf8: 1
+XTerm*faceName: mono
+XTerm*faceSize: 10
+XTerm*renderFont: true
+!XTerm.termName: xterm-256color
+XTerm*geometry: 130x40
+XTerm*metaSendsEscape: true
+XTerm*backarrowKey: false
+XTerm.ttyModes: erase ^?
+xterm*trimSelection: true
+XTerm*saveLines: 99999
+XTerm*reverseVideo: true
+XTerm*alternateScroll: true
+XTerm*printerCommand: xterm -e sh -c 'less -r <&3' 3<&0
+XTerm*translations: #override \n\
+    Ctrl <Key>minus: smaller-vt-font() \n\
+    Ctrl <Key>plus: larger-vt-font() \n\
+    Ctrl <Key>0: set-vt-font(d) \n\
+    Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>L: clear-saved-lines() \n\
+    Ctrl Shift <Key>U: scroll-back(1,halfpage) \n\
+    Ctrl Shift <Key>D: scroll-forw(1,halfpage) \n\
+    Ctrl Shift <Key>F: print-everything() \n\
+    Ctrl Shift <Key>space: set-altscreen(toggle) \n\
+    Ctrl <Key>Tab: set-reverse-video(toggle) \n\
+    Shift <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY)
+
+!! Fonts
+Xft.lcdfilter: lcddefault
+Xft.antialias: true
+Xft.autohint: 0
+Xft.hinting: true
+Xft.hintstyle: hintfull
+Xft.rgba: rgb
+Xft.dpi: 96
+
+/* !! Colorscheme (gruvbox) */
+/* *background: #1d2021 */
+/* *foreground: #ebdbb2 */
+/* *color0:  #1d2021 */
+/* *color8:  #928374 */
+/* *color1:  #cc241d */
+/* *color9:  #fb4934 */
+/* *color2:  #98971a */
+/* *color10: #b8bb26 */
+/* *color3:  #d79921 */
+/* *color11: #fabd2f */
+/* *color4:  #458588 */
+/* *color12: #83a598 */
+/* *color5:  #b16286 */
+/* *color13: #d3869b */
+/* *color6:  #689d6a */
+/* *color14: #8ec07c */
+/* *color7:  #a89984 */
+/* *color15: #ebdbb2 */

@@ -1,8 +1,4 @@
 # For the benefit of emacs users: -*- shell-script -*-
-###########################
-# xbindkeys configuration #
-###########################
-#
 # Version: 1.8.6
 #
 # If you edit this file, do not forget to uncomment any lines
@@ -16,7 +12,6 @@
 #    "command to start"
 #       associated key
 #
-#
 # A list of keys is in /usr/include/X11/keysym.h and in
 # /usr/include/X11/keysymdef.h
 # The XK_ is not needed.
@@ -25,65 +20,35 @@
 #   Release, Control, Shift, Mod1 (Alt), Mod2 (NumLock),
 #   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
 #
-
 # The release modifier is not a standard X modifier, but you can
 # use it if you want to catch release events instead of press events
-
+#
 # By defaults, xbindkeys does not pay attention with the modifiers
 # NumLock, CapsLock and ScrollLock.
 # Uncomment the lines above if you want to pay attention to them.
-
-#keystate_numlock = enable
-#keystate_capslock = enable
-#keystate_scrolllock= enable
-
-# Examples of commands:
-
-# "xbindkeys_show"
-  # control+shift + q
-
-# set directly keycode (here control + f with my keyboard)
-# "xterm"
-  # c:41 + m:0x4
-
-# specify a mouse button
-# "xterm"
-  # control + b:2
-
-#"xterm -geom 50x20+20+20"
-#   Shift+Mod2+alt + s
 #
-## set directly keycode (here control+alt+mod2 + f with my keyboard)
-#"xterm"
-#  alt + c:0x29 + m:4 + mod2
-#
-## Control+Shift+a  release event starts rxvt
-#"rxvt"
-#  release+control+shift + a
-#
-## Control + mouse button 2 release event starts rxvt
-#"rxvt"
-#  Control + b:2 + Release
+# keystate_numlock = enable
+# keystate_capslock = enable
+# keystate_scrolllock= enable
 
-# Change tabs with side mouse buttons
-"xdotool key Ctrl+Shift+Tab"
+# Mouse buttons (tab control)
+"xdotool key Ctrl+Prior"
     b:8
-"xdotool key Ctrl+Tab"
+"xdotool key Ctrl+Next"
     b:9
+"xdotool key Ctrl+Shift+T"
+    b:10
+
 # Remap back and forward
 "xdotool key XF86Back"
     Control + b:8
 "xdotool key XF86Forward"
     Control + b:9
-# Undo close tab with DPI button
-"xdotool key Ctrl+Shift+T"
-    b:10
-# Up/Down in fsearch
-# "~/scripts/fsearch-keys.sh Down"
-#     control + j
-# "~/scripts/fsearch-keys.sh Up"
-#     control + k
 
-##################################
-# End of xbindkeys configuration #
-##################################
+# Media keys
+"xdotool key XF86AudioPlay"
+    Mod4 + Home
+"xdotool key XF86AudioPrev"
+    Mod4 + Insert
+"xdotool key XF86AudioNext"
+    Mod4 + Prior
