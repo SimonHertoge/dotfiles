@@ -4,21 +4,20 @@ set autoindent
 set backspace=indent,eol,start
 set complete-=i
 set smarttab
-" set incsearch
+set incsearch
 set laststatus=2
 set ruler
 set wildmenu
 set autoread
-set number relativenumber
+set number
 set hlsearch
 set clipboard=unnamedplus
-" set paste
 set pastetoggle=<F10>
 set go+=a
 set whichwrap+=<,>,[,]
 set tabstop=4
 set shiftwidth=4
-set expandtab
+"set expandtab
 set scrolloff=3
 set noshowmode
 set ignorecase
@@ -35,9 +34,26 @@ set shell=bash
 set undodir=~/.vim/undo
 set undofile
 set showcmd
-set guioptions -=m
-set guioptions -=T
-set guioptions -=r
+set lazyredraw
+set conceallevel=0
+set display+=uhex
+filetype plugin indent on
+syntax on
+
+"" Neovim settings
+if has('nvim')
+    set inccommand=nosplit
+endif
+
+"" GVim settings
+if has("gui_running")
+    set guioptions -=m
+    set guioptions -=T
+    set guioptions -=r
+    nmap <C-CR> o<Esc>
+    nmap <C-S-CR> O<Esc>
+    nmap <C-f> :promptfind<CR>
+endif
 
 "" Cursor shapes
 let &t_SI = "\<Esc>[6 q"
@@ -46,58 +62,45 @@ let &t_EI = "\<Esc>[2 q"
 
 "" Load plugins
 call plug#begin('~/.vim/plugged')
-Plug 'lervag/vimtex'
+" Plug 'lervag/vimtex'
 Plug 'junegunn/goyo.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-startify'
-Plug 'ajh17/VimCompletesMe'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'alvan/vim-closetag'
 Plug 'elzr/vim-json'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'tpope/vim-surround'
 Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-commentary'
-Plug 'PotatoesMaster/i3-vim-syntax'
-Plug 'suan/vim-instant-markdown'
-Plug 'jtratner/vim-flavored-markdown'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 Plug 'tpope/vim-obsession'
 Plug 'scrooloose/nerdtree'
-Plug 'severin-lemaignan/vim-minimap'
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'sheerun/vim-polyglot'
-Plug 'jiangmiao/auto-pairs'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'ryanoasis/vim-devicons'
-Plug 'w0rp/ale'
+" Plug 'ntpeters/vim-better-whitespace'
 Plug 'ap/vim-css-color'
 Plug 'kien/rainbow_parentheses.vim'
-Plug 'mattn/emmet-vim'
 Plug 'tpope/vim-repeat'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'airblade/vim-rooter'
 Plug 'christoomey/vim-titlecase'
-Plug 'tommcdo/vim-lion'
-Plug 'simnalamburt/vim-mundo'
-Plug 'dyng/ctrlsf.vim'
-Plug 'sunaku/vim-shortcut'
-Plug 'ervandew/supertab'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-fugitive'
-Plug 'svermeulen/vim-easyclip'
-Plug 'haya14busa/incsearch.vim'
-Plug 'francoiscabrol/ranger.vim'
-Plug 'davidhalter/jedi-vim'
-" Plug 'chrisbra/Recover.vim'
-" Plug 'kshenoy/vim-signature'
-" Plug 'junegunn/vim-peekaboo'
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'junegunn/vim-easy-align'
+Plug 'subnut/visualstar.vim'
+"Plug 'w0rp/ale'
+"Plug 'dyng/ctrlsf.vim'
+"Plug 'ervandew/supertab'
+"Plug 'ludovicchabant/vim-gutentags'
+"Plug 'majutsushi/tagbar'
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
+"Plug 'ajh17/VimCompletesMe'
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-lua/lsp-status.nvim'
 call plug#end()
 
 "" Plugin settings
@@ -105,60 +108,34 @@ let NERDTreeMapActivateNode='l'
 let g:airline_powerline_fonts = 1
 let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_italic=1
-" Bypasses bug with C-BS / C-w
-let g:AutoPairsMapCh = 0
-let g:EasyClipUseSubstituteDefaults = 1
-let g:EasyClipAutoFormat = 1
-let g:AutoPairs = {'{':'}'}
-let g:incsearch#auto_nohlsearch = 0
-let g:polyglot_disabled = ['latex']
-
-"" Theming
-hi CursorLine cterm=none ctermbg=235 ctermfg=none
-" colorscheme wal
-colorscheme gruvbox
+let g:markdown_fenced_languages = ['html', 'css', 'python', 'bash=sh', 'js=javascript', 'rust', 'xml']
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal_code_blocks = 0
+let g:airline_highlighting_cache = 1
 
 "" Keybindings
-cmap <C-h> <C-w>
-cmap <C-j> <C-n>
-cmap <C-k> <C-p>
-cmap nl normal
+" nnoremap J gt
+" nnoremap K gT
+map <C-_> gcc<Esc>
+vmap gx ::normal gx<CR>
 cmap w!! w !sudo tee > /dev/null %
-imap <C-a> <Esc>ggVG
-inoremap <C-h> <C-w>
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-nmap <BS> i<BS><Esc>l
-nmap <C-g> :Goyo<CR>
-nmap <C-p> :Buffers<CR>
-nmap <CR> o<Esc>
-nmap <F1> :NERDTreeToggle<CR>
-nmap <F2> :BufExplorerHorizontalSplit<CR>
-nmap <F3> :MinimapToggle<CR>
-nmap <F4> :MundoToggle<CR>
-nmap <F5> :TagbarToggle<CR>
-nmap <Space> i <Esc>l
-nmap <leader>j :call JsBeautify()<CR>
-nmap <leader>r :NERDTreeFind<CR>
-nmap <leader>s :sort<CR>
-nmap <leader>w :StripWhitespace<CR>
-nmap ZZ :wqa<CR>
-nmap gn :tabe<CR>
 nnoremap <C-h> <C-W><C-H>
 nnoremap <C-j> <C-W><C-J>
 nnoremap <C-k> <C-W><C-K>
 nnoremap <C-l> <C-W><C-L>
-nnoremap J gt
-nnoremap K gT
-nnoremap gm m
-vmap <C-c> y
-vmap gx ::normal gx<CR>
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+nmap <C-g> :Goyo<CR>
+nmap <C-p> :Buffers<CR>
+nmap <F1> :NERDTreeToggle<CR>
+nmap <F2> :BufExplorerHorizontalSplit<CR>
+nmap <F3> :TagbarToggle<CR>
+nmap <leader>j :call JsBeautify()<CR>
+nmap <leader>r :NERDTreeFind<CR>
+nmap <leader>s :sort<CR>
+nmap <leader>w :StripWhitespace<CR>
 
-"" Vim hacks
-nmap <C-_> gcc<Esc>
-vmap <C-_> gcc<Esc>
-" .Xdefaults mappings
+"" urxvt .Xresources mappings
 " Ctrl-Semicolon
 set <F13>=^[[25~
 nmap <F13> :noh<CR>
@@ -168,25 +145,53 @@ nmap <F14> o<Esc>
 " Ctrl-Shift-Enter
 set <F15>=^[[27~
 nmap <F15> O<Esc>
+" Ctrl-Backspace
+set <F16>=^[[28~
+imap <F16> <C-W>
 
-"" GVim keybindings
-nmap <C-CR> o<Esc>
-nmap <C-S-CR> O<Esc>
-nmap <C-f> :promptfind<CR>
+"" LSP config
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    "nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 
 "" Build configs
 au FileType python map <F9> :w !python<CR>
 au FileType vim    map <F9> :w<CR>:ReloadConfig<CR>:PlugInstall<CR>
+autocmd BufWritePost *.tex silent! execute "!xelatex % >/dev/null 2>&1" | redraw!
 
 "" Triggers
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
-au VimResized * wincmd =
+au ColorScheme * :hi clear CursorLine | :hi CursorLine gui=underline cterm=underline
 
 "" Commands
-command! ReloadConfig :so ~/.vimrc
+command! ReloadConfig :so ~/.config/nvim/init.vim
+command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 
 "" Functions
 " mkdir parent folder if not exists
@@ -202,3 +207,15 @@ augroup BWCCreateDir
     autocmd!
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
+
+" When editing a file, always jump to the last known cursor position.
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+  \ |   exe "normal! g`\""
+  \ | endif
+
+"" Theming
+"colorscheme wal
+"colorscheme gruvbox
+colorscheme industry
+
